@@ -8,15 +8,15 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
-public class ColourfulBlocksSyncMessage implements IMessage{
+public class ColorfulBlocksSyncMessage implements IMessage{
 
 	private NBTTagCompound nbt;
 	
-	public ColourfulBlocksSyncMessage() {
+	public ColorfulBlocksSyncMessage() {
 		nbt = new NBTTagCompound();
 	}
 	
-	public ColourfulBlocksSyncMessage(NBTTagCompound tag){
+	public ColorfulBlocksSyncMessage(NBTTagCompound tag){
 		nbt = tag;
 	}
 	
@@ -30,10 +30,10 @@ public class ColourfulBlocksSyncMessage implements IMessage{
 		ByteBufUtils.writeTag(buf, nbt);
 	}
 	
-	public static class ColourfulBlocksSyncMessageHandler implements IMessageHandler<ColourfulBlocksSyncMessage, IMessage>{
+	public static class ColorfulBlocksSyncMessageHandler implements IMessageHandler<ColorfulBlocksSyncMessage, IMessage>{
 
 		@Override
-		public IMessage onMessage(ColourfulBlocksSyncMessage message, MessageContext ctx) {
+		public IMessage onMessage(ColorfulBlocksSyncMessage message, MessageContext ctx) {
 			ColourfulBlocksManager.readMapFromNBT(message.nbt);
 			return null;
 		}

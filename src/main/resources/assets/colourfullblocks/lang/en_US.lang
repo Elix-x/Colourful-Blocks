@@ -1,3 +1,12 @@
-guibrush.button.random=Random
-guibrush.button.done=Done
-message.nodyes=You don't have required dyes in your inventory...
+item.coloringtool.nameorder=%material %tool
+item.coloringtool.brush=brush
+
+coloringtool.desc.color.red=Red
+coloringtool.desc.color.green=Green
+coloringtool.desc.color.blue=Blue
+coloringtool.desc.buffer=Buffer
+coloringtool.desc.durability=Durability
+
+guiselectcolor.button.random=Random
+guiselectcolor.button.done=Done
+message.nodies=You don't have required dies in your inventory!

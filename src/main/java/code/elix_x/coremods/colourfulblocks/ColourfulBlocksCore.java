@@ -11,11 +11,11 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin.Name;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
 @Name(value = ColourfulBlocksBase.MODID)
-@TransformerExclusions(value = "code.elix_x.coremods")
+@TransformerExclusions(value = "code.elix_x.coremods.colourfulblocks.core")
 @MCVersion(value = "1.7.10")
 public final class ColourfulBlocksCore implements IFMLLoadingPlugin{
 
-	//-Dfml.coreMods.load=code.elix_x.coremods.colourfullblocks.ColourfullBlocksCore
+	//-Dfml.coreMods.load=code.elix_x.coremods.colourfulblocks.ColourfulBlocksCore
 	
 	public static final String Transformer = ColourfulBlocksTransformer.class.getName();
 	

@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
 
 import code.elix_x.coremods.colourfulblocks.ColourfulBlocksBase;
-import code.elix_x.coremods.colourfulblocks.net.ColourfulBlocksSyncMessage;
+import code.elix_x.coremods.colourfulblocks.net.ColorfulBlocksSyncMessage;
 import code.elix_x.excore.utils.color.RGBA;
 import code.elix_x.excore.utils.pos.DimBlockPos;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -62,7 +62,7 @@ public class ColourfulBlocksManager {
 
 			}
 			if(rgba != null){
-				return rgba.getHex();
+				return rgba.argb();
 			}
 			return 16777215;
 			//		return 10994515;
@@ -133,6 +133,9 @@ public class ColourfulBlocksManager {
 		synchronized (map){
 			map.remove(pos);
 			syncMapWith(null);
+			if(FMLCommonHandler.instance().getSide() == Side.CLIENT){
+				Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(pos.getX(), pos.getY(), pos.getZ());
+			}
 		}
 	}
 
@@ -167,58 +170,12 @@ public class ColourfulBlocksManager {
 		synchronized (map) {
 			if(player != null){
 				if(!player.worldObj.isRemote){
-					ColourfulBlocksBase.net.sendTo(new ColourfulBlocksSyncMessage(writeMapToNBT(new NBTTagCompound())), (EntityPlayerMP) player);
+					ColourfulBlocksBase.net.sendTo(new ColorfulBlocksSyncMessage(writeMapToNBT(new NBTTagCompound())), (EntityPlayerMP) player);
 				}
 			} else {
-				ColourfulBlocksBase.net.sendToAll(new ColourfulBlocksSyncMessage(writeMapToNBT(new NBTTagCompound())));
+				ColourfulBlocksBase.net.sendToAll(new ColorfulBlocksSyncMessage(writeMapToNBT(new NBTTagCompound())));
 			}
 		}
-	}
-
-	public static void onStarting(FMLServerStartingEvent event){
-		/*	synchronized (map) {
-			map.clear();
-
-//			File file = new File(event.world.getSaveHandler().getWorldDirectory(), "coloredBlocks.dat");
-			File file = new File(event.getServer().getFolderName(), "coloredBlocks.dat");
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-				logger.error("Caught exception while creating save file: ", e);
-			}
-
-			NBTTagCompound nbt = null;
-			try {
-				nbt = CompressedStreamTools.read(file);
-			} catch (IOException e) {
-				logger.error("Caught exception while reading file: ", e);
-			}
-			if(nbt != null){
-				readMapFromNBT(nbt);
-			}
-		}*/
-	}
-
-	public static void onStopping(FMLServerStoppingEvent event){
-		/*synchronized (map) {
-//			File file = new File(event.world.getSaveHandler().getWorldDirectory(), "coloredBlocks.dat");
-			File file = new File(MinecraftServer.getServer().getFolderName(), "coloredBlocks.dat");
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-				logger.error("Caught exception while creating save file: ", e);
-			}
-
-			try {
-				CompressedStreamTools.safeWrite(writeMapToNBT(new NBTTagCompound()), file);
-			} catch (IOException e) {
-				logger.error("Caught exception while saving file: ", e);
-			}
-		}*/
-	}
-
-	public static void stopped(FMLServerStoppedEvent event){
-
 	}
 
 	public static class Events{

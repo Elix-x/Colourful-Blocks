@@ -16,10 +16,10 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import code.elix_x.coremods.colourfulblocks.ColourfulBlocksBase;
-import code.elix_x.coremods.colourfulblocks.net.ColourChangeMessage;
+import code.elix_x.coremods.colourfulblocks.net.ColorChangeMessage;
 import code.elix_x.excore.utils.color.RGBA;
 
-public class GuiBrush extends GuiScreen{
+public class GuiSelectColor extends GuiScreen{
 
 	private ResourceLocation texture = new ResourceLocation(ColourfulBlocksBase.MODID + ":textures/gui/brush.png");
 
@@ -35,10 +35,6 @@ public class GuiBrush extends GuiScreen{
 	private GuiTextField gT;
 	private GuiTextField bT;
 
-	/*private GuiOptionSliderCustom rS;
-	private GuiOptionSliderCustom gS;
-	private GuiOptionSliderCustom bS;*/
-
 	private Random random;
 
 	private Block block;
@@ -48,7 +44,7 @@ public class GuiBrush extends GuiScreen{
 	public int g;
 	public int b;
 
-	public GuiBrush(RGBA rgba) {
+	public GuiSelectColor(RGBA rgba) {
 		xSize = 248;
 		ySize = 166;
 
@@ -70,8 +66,8 @@ public class GuiBrush extends GuiScreen{
 		this.guiLeft = (this.width - this.xSize) / 2;
 		this.guiTop = (this.height - this.ySize) / 2;
 
-		randomB = new GuiButton(0, guiLeft + 7, guiTop + ySize - 3 - 4 - 16, 64, 16, StatCollector.translateToLocal("guibrush.button.random"));
-		done = new GuiButton(1, guiLeft + xSize - 7 - 64, guiTop + ySize - 3 - 4 - 16, 64, 16, StatCollector.translateToLocal("guibrush.button.done"));
+		randomB = new GuiButton(0, guiLeft + 7, guiTop + ySize - 3 - 4 - 16, 64, 16, StatCollector.translateToLocal("guiselectcolor.button.random"));
+		done = new GuiButton(1, guiLeft + xSize - 7 - 64, guiTop + ySize - 3 - 4 - 16, 64, 16, StatCollector.translateToLocal("guiselectcolor.button.done"));
 
 		buttonList.clear();
 		buttonList.add(randomB);
@@ -84,16 +80,11 @@ public class GuiBrush extends GuiScreen{
 		rT.setText("" + r);
 		gT.setText("" + g);
 		bT.setText("" + b);
-
-		/*rS = new GuiOptionSliderCustom(10, guiLeft + xSize / 2 - 218 / 2, guiTop + ySize - 3 - 4 - 16 - 90, EnumColorListener.R);
-		gS = new GuiOptionSliderCustom(10, guiLeft + xSize / 2 - 218 / 2, guiTop + ySize - 3 - 4 - 16 - 90, EnumColorListener.G);
-		bS = new GuiOptionSliderCustom(10, guiLeft + xSize / 2 - 218 / 2, guiTop + ySize - 3 - 4 - 16 - 90, EnumColorListener.B);*/
 	}
 
 	@Override
 	public void drawScreen(int i, int j, float f) {
 		super.drawScreen(i, j, f);
-		//		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 
@@ -117,8 +108,6 @@ public class GuiBrush extends GuiScreen{
 			fixBlock();
 			GL11.glPushMatrix();
 			GL11.glScaled(3, 3, 3);
-			//			GL11.glColor3d(r, g, b);
-			//			GL11.glColor3d(150, 0, 150);
 			CustomItemRenderer.renderItemIntoGUI(fontRendererObj, Minecraft.getMinecraft().getTextureManager(), new ItemStack(block), (guiLeft + xSize / 2) / 3 - 8, (guiTop + (ySize - 3 - 4 - 16 - 90) / 2) / 3 - 8, itemRender, new RGBA(r, g, b, 255));
 			GL11.glPopMatrix();
 		} catch(NullPointerException e){
@@ -145,7 +134,7 @@ public class GuiBrush extends GuiScreen{
 			b = random.nextInt(255);
 		}
 		if(button == done){
-			ColourfulBlocksBase.net.sendToServer(new ColourChangeMessage(new RGBA(r, g, b, 100), Minecraft.getMinecraft().thePlayer, Minecraft.getMinecraft().theWorld.provider.dimensionId));
+			ColourfulBlocksBase.net.sendToServer(new ColorChangeMessage(new RGBA(r, g, b)));
 			Minecraft.getMinecraft().displayGuiScreen(null);
 		}
 	}
@@ -209,10 +198,6 @@ public class GuiBrush extends GuiScreen{
 	 * @return if a is between a and b inclusively (may be on i or j)
 	 */
 	public static boolean isPointBetweenInclusive(int a, int i, int j){
-		/*	System.out.println("a: " + a);
-		System.out.println("i: " + i);
-		System.out.println("j: " + j);
-		System.out.println("result: " + ((i <= a && a <= j) || (j <= a && a <= i)));*/
 		return (i <= a && a <= j) || (j <= a && a <= i);
 	}
 
@@ -253,12 +238,6 @@ public class GuiBrush extends GuiScreen{
 	@Override
 	protected void keyTyped(char c, int keyID) {
 		super.keyTyped(c, keyID);
-		/*String s = String.valueOf(c);
-		try{
-			int i = Integer.parseInt(s);
-		} catch(NumberFormatException e){
-			return;
-		}*/
 		if(Character.isDigit(c) || keyID == Keyboard.KEY_BACK){
 			if(rT.textboxKeyTyped(c, keyID)){
 				if(!rT.getText().equals("")){
@@ -319,135 +298,6 @@ public class GuiBrush extends GuiScreen{
 	@Override
 	protected void mouseMovedOrUp(int x, int y, int which) {
 		super.mouseMovedOrUp(x, y, which);
-		/*if(which == 0){
-
-		}*/
-	}
-
-	public class GuiOptionSliderCustom extends GuiButton
-	{
-		private float currentPercent;
-		public boolean held;
-		/*private final float field_146132_r;
-		private final float field_146131_s;*/
-		private EnumColorListener color;
-
-		public GuiOptionSliderCustom(int id, int x, int y, EnumColorListener e)
-		{
-			super(id, x, y, 255, 4, "");
-
-		}
-
-		/*public GuiOptionSliderCustom(int id, int x, int y/*, float p_i45017_5_, float p_i45017_6_)
-		{
-//			super(id, x, y, 150, 20, "");
-			super(id, x, y, 255, 4, "");
-			this.field_146134_p = 1.0F;
-
-		}*/
-
-		/**
-		 * Returns 0 if the button is disabled, 1 if the mouse is NOT hovering over this button and 2 if it IS hovering over
-		 * this button.
-		 */
-		public int getHoverState(boolean p_146114_1_)
-		{
-			return 0;
-		}
-
-		/**
-		 * Fired when the mouse button is dragged. Equivalent of MouseListener.mouseDragged(MouseEvent e).
-		 */
-		protected void mouseDragged(Minecraft p_146119_1_, int p_146119_2_, int p_146119_3_)
-		{
-			if (this.visible)
-			{
-				if (this.held)
-				{
-					this.currentPercent = (float)(p_146119_2_ - (this.xPosition + 4)) / (float)(this.width - 8);
-
-					if (this.currentPercent < 0.0F)
-					{
-						this.currentPercent = 0.0F;
-					}
-
-					if (this.currentPercent > 1.0F)
-					{
-						this.currentPercent = 1.0F;
-					}
-
-					/*float f = this.field_146133_q.denormalizeValue(this.field_146134_p);
-					p_146119_1_.gameSettings.setOptionFloatValue(this.field_146133_q, f);
-					this.field_146134_p = this.field_146133_q.normalizeValue(f);
-					this.displayString = p_146119_1_.gameSettings.getKeyBinding(this.field_146133_q);*/
-					if(color == EnumColorListener.R){
-						r = (int) (currentPercent * 255f);
-					}
-					if(color == EnumColorListener.G){
-						g = (int) (currentPercent * 255f);
-					}
-					if(color == EnumColorListener.B){
-						b = (int) (currentPercent * 255f);
-					}
-				}
-
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				this.drawTexturedModalRect(this.xPosition + (int)(this.currentPercent * (float)(this.width - 8)), this.yPosition, 0, 66, 4, 20);
-				this.drawTexturedModalRect(this.xPosition + (int)(this.currentPercent * (float)(this.width - 8)) + 4, this.yPosition, 196, 66, 4, 20);
-			}
-		}
-
-		/**
-		 * Returns true if the mouse has been pressed on this control. Equivalent of MouseListener.mousePressed(MouseEvent
-		 * e).
-		 */
-		public boolean mousePressed(Minecraft minecraft, int x, int y)
-		{
-			if (super.mousePressed(minecraft, x, y))
-			{
-				this.currentPercent = (float)(x - (this.xPosition + 4)) / (float)(this.width - 8);
-
-				if (this.currentPercent < 0.0F)
-				{
-					this.currentPercent = 0.0F;
-				}
-
-				if (this.currentPercent > 1.0F)
-				{
-					this.currentPercent = 1.0F;
-				}
-
-				/*minecraft.gameSettings.setOptionFloatValue(this.field_146133_q, this.field_146133_q.denormalizeValue(this.field_146134_p));
-				this.displayString = minecraft.gameSettings.getKeyBinding(this.field_146133_q);*/
-				if(color == EnumColorListener.R){
-					r = (int) (currentPercent * 255f);
-				}
-				if(color == EnumColorListener.G){
-					g = (int) (currentPercent * 255f);
-				}
-				if(color == EnumColorListener.B){
-					b = (int) (currentPercent * 255f);
-				}
-				this.held = true;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-
-		/**
-		 * Fired when the mouse button is released. Equivalent of MouseListener.mouseReleased(MouseEvent e).
-		 */
-		public void mouseReleased(int x, int y)
-		{
-			this.held = false;
-		}
-	}
-
-	public enum EnumColorListener {
-		R, G, B;
 	}
 
 }
