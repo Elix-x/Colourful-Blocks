@@ -39,7 +39,7 @@ public class ColourfulBlocksBase {
 
 	public static final String MODID = "colourfullblocks";
 	public static final String NAME = "Colourful Blocks";
-	public static final String VERSION = "1.1";
+	public static final String VERSION = "1.1.1";
 
 	@Mod.Instance(MODID)
 	public static ColourfulBlocksBase instance;

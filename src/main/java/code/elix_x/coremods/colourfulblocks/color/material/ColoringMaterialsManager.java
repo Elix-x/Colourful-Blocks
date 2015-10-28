@@ -199,7 +199,7 @@ public class ColoringMaterialsManager {
 			ResourceLocation texture = null;
 			if(Block.getBlockFromItem(itemstack.getItem()) != Blocks.air){
 				Block block = Block.getBlockFromItem(itemstack.getItem());
-				String textureName = ObfuscationReflectionHelper.getPrivateValue(Block.class, block, "textureName");
+				String textureName = ObfuscationReflectionHelper.getPrivateValue(Block.class, block, "textureName", "field_149768_d");
 				if(textureName != null){
 					if(textureName.split(":").length == 1){
 						textureName = "minecraft:" + textureName;
