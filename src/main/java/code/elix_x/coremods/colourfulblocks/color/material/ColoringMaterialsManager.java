@@ -208,7 +208,7 @@ public class ColoringMaterialsManager {
 				}
 			} else {
 				Item item = itemstack.getItem();
-				String textureName = ObfuscationReflectionHelper.getPrivateValue(Item.class, item, "iconString");
+				String textureName = ObfuscationReflectionHelper.getPrivateValue(Item.class, item, "iconString", "field_111218_cA");
 				if(textureName != null){
 					if(textureName.split(":").length == 1){
 						textureName = "minecraft:" + textureName;
@@ -419,7 +419,9 @@ public class ColoringMaterialsManager {
 										b = ArrayUtils.add(b, rgba.b);
 									}
 								}
-								mat.color = AdvancedMathUtils.average(r[0], ArrayUtils.subarray(r, 1, r.length)) + ":" + AdvancedMathUtils.average(g[0], ArrayUtils.subarray(g, 1, g.length)) + ":" + AdvancedMathUtils.average(b[0], ArrayUtils.subarray(b, 1, b.length));
+								if(r.length > 0 && g.length > 0 && b.length > 0){
+									mat.color = AdvancedMathUtils.average(r[0], ArrayUtils.subarray(r, 1, r.length)) + ":" + AdvancedMathUtils.average(g[0], ArrayUtils.subarray(g, 1, g.length)) + ":" + AdvancedMathUtils.average(b[0], ArrayUtils.subarray(b, 1, b.length));
+								}
 							}
 						}
 					}
