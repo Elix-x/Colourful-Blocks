@@ -76,14 +76,17 @@ public class ColoringMaterialsManager {
 		extensionsDir = new File(ColourfulBlocksBase.configFolder, "extensions");
 		if(!extensionsDir.exists()){
 			extensionsDir.mkdirs();
+			logger.info("Generating extensions");
 			initMaterials();
 			initRecipes();
 			initLocalisations();
 		}
 		updateOldStuff();
+		logger.info("Fixing extensions");
 		if(FMLCommonHandler.instance().getSide() == Side.CLIENT && ColourfulBlocksBase.mainConfig.getBoolean("fixColors", "json", true, "Fix color for items with color \"0\" or \"0:0:0\" or \"0:0:0:0\", but with valid crafting item.")){
 			fixColors();
 		}
+		logger.info("Loading extensions");
 		loadMaterials();
 		loadRecipes();
 		loadLocalisations();
@@ -91,6 +94,7 @@ public class ColoringMaterialsManager {
 
 	@Deprecated
 	private static void updateOldStuff() {
+		logger.info("Updating old stuff");
 		File oldFile = new File(ColourfulBlocksBase.configFolder, "brushes.json");
 		if(oldFile.exists()){
 			try {
@@ -133,7 +137,7 @@ public class ColoringMaterialsManager {
 				}
 				FileUtils.deleteDirectory(oldLangDir);
 			} catch(IOException e){
-				logger.error("Caught exception while porting old configuration: ", e);
+				logger.error("Caught exception while updating old stuff: ", e);
 			}
 		}
 	}
@@ -195,7 +199,7 @@ public class ColoringMaterialsManager {
 	@SideOnly(Side.CLIENT)
 	private static RGBA recognizeColorToRGBA(ItemStack itemstack) {
 		RGBA color = new RGBA(0, 0, 0, 0);
-		if(itemstack != null){
+		if(itemstack != null && itemstack.getItem() != null){
 			ResourceLocation texture = null;
 			if(Block.getBlockFromItem(itemstack.getItem()) != Blocks.air){
 				Block block = Block.getBlockFromItem(itemstack.getItem());
@@ -251,14 +255,16 @@ public class ColoringMaterialsManager {
 
 	private static void initMaterials() {
 		try {
+			logger.info("Generating vanilla extension materials");
 			initDefaultMaterials();
 		} catch (IOException e) {
 			logger.error("Caught exception while generating vanilla extension materials: ", e);
 		}
 		try {
+			logger.info("Generating generated extension materials");
 			initGenMaterials();
 		} catch (IOException e) {
-			logger.error("Caught exception while generating generated extension: ", e);
+			logger.error("Caught exception while generating generated extension materials: ", e);
 		}
 	}
 
@@ -289,6 +295,7 @@ public class ColoringMaterialsManager {
 		GsonMaterialsConversion conversion = new GsonMaterialsConversion(new ArrayList<ColoringMaterialsManager.GsonMaterialsConversion.GsonMaterialConversion>());
 		for(ToolMaterial mat : ToolMaterial.values()){
 			if(mat != ToolMaterial.WOOD && mat != ToolMaterial.STONE && mat != ToolMaterial.IRON && mat != ToolMaterial.GOLD && mat != ToolMaterial.EMERALD){
+				logger.debug("Found modded tool material. Generating coloring tool material from it.");
 				conversion.materials.add(new GsonMaterialConversion(mat.name(), mat.getMaxUses(), mat.getHarvestLevel(), FMLCommonHandler.instance().getSide() == Side.CLIENT ? recognizeColorToString(mat) : "0:0:0", RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, ItemStackStringTranslator.toString(recognizeRepairItem(mat)))));
 			}
 		}
@@ -303,6 +310,7 @@ public class ColoringMaterialsManager {
 
 	private static void initRecipes() {
 		try {
+			logger.info("Generating vanilla extension recipes");
 			initDefaultRecipes();
 		} catch (IOException e) {
 			logger.error("Caught exception while generating vanilla extension recipes: ", e);
@@ -330,11 +338,13 @@ public class ColoringMaterialsManager {
 
 	private static void initLocalisations() {
 		try {
+			logger.info("Generating vanilla extension localisations");
 			initDefaultLocalisations();
 		} catch (IOException e) {
 			logger.error("Caught exception while generating vanilla extension localisations: ", e);
 		}
 		try {
+			logger.info("Generating generated extension localisations");
 			initGenLocalisations();
 		} catch (IOException e) {
 			logger.error("Caught exception while generating generated extension localisations: ", e);
@@ -373,6 +383,7 @@ public class ColoringMaterialsManager {
 		String s = "";
 		for(ToolMaterial mat : ToolMaterial.values()){
 			if(mat != ToolMaterial.WOOD && mat != ToolMaterial.STONE && mat != ToolMaterial.IRON && mat != ToolMaterial.GOLD && mat != ToolMaterial.EMERALD){
+				logger.debug("Found modded tool material. Generating coloring tool material localisations from it.");
 				s += COLORINGTOOLMATERIALLANG + "." + mat.name();
 				s += "=";
 				s += mat.name().charAt(0) + mat.name().substring(1, mat.name().length()).toLowerCase();
@@ -392,6 +403,7 @@ public class ColoringMaterialsManager {
 	 */
 
 	private static void fixColors() {
+		logger.info("Fixing colors.");
 		for(File file : extensionsDir.listFiles(new FileFilter() {
 
 			@Override
@@ -403,10 +415,12 @@ public class ColoringMaterialsManager {
 			File json = new File(file, "materials.json");
 			if(json.exists()){
 				try{
+					logger.info("Fixing colors in extension " + file.getName());
 					JsonReader reader = new JsonReader(new FileReader(json));
 					GsonMaterialsConversion mats = gson.fromJson(reader, GsonMaterialsConversion.class);
 					for(GsonMaterialConversion mat : mats.materials){
 						if(mat.color.equals("0") || mat.color.equals("0:0:0") || mat.color.equals("0:0:0:0")){
+							logger.debug("Found material that needs color fixing: " + mat.name);
 							if(!mat.ingredients.isEmpty()){
 								int[] r = new int[0];
 								int[] g = new int[0];
@@ -424,6 +438,11 @@ public class ColoringMaterialsManager {
 								}
 							}
 						}
+						if(mat.color.equals("0") || mat.color.equals("0:0:0") || mat.color.equals("0:0:0:0")){
+							logger.debug("Could not fix color for material: " + mat.name);
+						} else {
+							logger.debug("Successfully fixed color for material: " + mat.name);
+						}
 					}
 					reader.close();
 					JsonWriter writer = new JsonWriter(new FileWriter(json));
@@ -431,7 +450,7 @@ public class ColoringMaterialsManager {
 					gson.toJson(mats, GsonMaterialsConversion.class, writer);
 					writer.close();
 				} catch(IOException e){
-					logger.error("Caught exception while reading recipes.json. It will be ignored!");
+					logger.error("Caught exception while reading materials.json. It will be ignored!");
 				}
 			}
 		}
@@ -442,6 +461,7 @@ public class ColoringMaterialsManager {
 	 */
 
 	private static void loadMaterials() {
+		logger.info("Loading materials");
 		for(File file : extensionsDir.listFiles(new FileFilter() {
 
 			@Override
@@ -453,6 +473,7 @@ public class ColoringMaterialsManager {
 			File json = new File(file, "materials.json");
 			if(json.exists()){
 				try{
+					logger.info("Loading materials from extension " + file.getName());
 					JsonReader reader = new JsonReader(new FileReader(json));
 					GsonMaterialsConversion mats = gson.fromJson(reader, GsonMaterialsConversion.class);
 					for(GsonMaterialConversion mat : mats.materials){
@@ -482,6 +503,7 @@ public class ColoringMaterialsManager {
 	}
 
 	private static void loadRecipes() {
+		logger.info("Loading recipes");
 		for(File file : extensionsDir.listFiles(new FileFilter() {
 
 			@Override
@@ -493,6 +515,7 @@ public class ColoringMaterialsManager {
 			File json = new File(file, "recipes.json");
 			if(json.exists()){
 				try{
+					logger.info("Loading recipes from extension " + file.getName());
 					JsonReader reader = new JsonReader(new FileReader(json));
 					GsonRecipesConversion recs = gson.fromJson(reader, GsonRecipesConversion.class);
 					for(GsonRecipeHandlerConversion hand : recs.recipes){
@@ -509,6 +532,7 @@ public class ColoringMaterialsManager {
 	}
 
 	private static void loadLocalisations() {
+		logger.info("Loading localisations");
 		for(File file : extensionsDir.listFiles(new FileFilter() {
 
 			@Override
@@ -517,6 +541,7 @@ public class ColoringMaterialsManager {
 			}
 
 		})){
+			logger.info("Loading localisations from extension " + file.getName());
 			File langDir = new File(file, "lang");
 			for(File lang : langDir.listFiles(new FileFilter() {
 				@Override

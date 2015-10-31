@@ -40,10 +40,13 @@ public class ColoringToolsManager {
 	private static List<ColoringToolProvider<?>> providers = new ArrayList<ColoringToolProvider<?>>();
 
 	public static void init(){
+		logger.info("Creating items and recipes");
 		Configuration config = ColourfulBlocksBase.mainConfig;
-		for(Entry<ColoringToolMaterial, Pair<String, Map<String, Object>>> e : ColoringMaterialsManager.getAllMaterialsAndRecipes().entrySet()){
-			for(ColoringToolProvider provider : providers){
-				if(config.getBoolean(provider.getConfigOptionName(), "coloring tools", true, "Register " + provider.getConfigOptionName() + " as coloring tools?")){
+		for(ColoringToolProvider provider : providers){
+			if(config.getBoolean(provider.getConfigOptionName(), "coloring tools", true, "Register " + provider.getConfigOptionName() + " as coloring tools?")){
+				logger.info("Creating " + provider.getConfigOptionName());
+				for(Entry<ColoringToolMaterial, Pair<String, Map<String, Object>>> e : ColoringMaterialsManager.getAllMaterialsAndRecipes().entrySet()){
+					logger.debug("Registering underlying tool for material: " + e.getKey().name);
 					Item item = provider.provide(e.getKey());
 					GameRegistry.registerItem(item, ((IColoringTool) item).getRegistryPrefix() + "_" + e.getKey().name);
 					if(!e.getValue().getKey().equals(ColoringMaterialsManager.RECIPENAMENULL)){
