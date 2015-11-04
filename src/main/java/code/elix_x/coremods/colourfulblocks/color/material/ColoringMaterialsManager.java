@@ -543,6 +543,7 @@ public class ColoringMaterialsManager {
 		})){
 			logger.info("Loading localisations from extension " + file.getName());
 			File langDir = new File(file, "lang");
+			langDir.mkdir();
 			for(File lang : langDir.listFiles(new FileFilter() {
 				@Override
 				public boolean accept(File file) {

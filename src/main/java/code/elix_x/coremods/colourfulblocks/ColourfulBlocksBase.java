@@ -39,7 +39,7 @@ public class ColourfulBlocksBase {
 
 	public static final String MODID = "colourfullblocks";
 	public static final String NAME = "Colourful Blocks";
-	public static final String VERSION = "1.1.3";
+	public static final String VERSION = "1.1.4";
 
 	@Mod.Instance(MODID)
 	public static ColourfulBlocksBase instance;
@@ -59,8 +59,7 @@ public class ColourfulBlocksBase {
 	public static boolean consumeWaterOnPaint;
 
 	@EventHandler
-	public void preinit(FMLPreInitializationEvent event)
-	{ 
+	public void preInit(FMLPreInitializationEvent event) { 
 		net = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 		net.registerMessage(ColorfulBlocksSyncMessage.ColorfulBlocksSyncMessageHandler.class, ColorfulBlocksSyncMessage.class, 0, Side.CLIENT);
 		net.registerMessage(ColorChangeMessage.ColorChangeMessageHandler.class, ColorChangeMessage.class, 1, Side.SERVER);
@@ -106,8 +105,7 @@ public class ColourfulBlocksBase {
 	}
 
 	@EventHandler
-	public void init(FMLInitializationEvent event) throws MalformedJsonException
-	{
+	public void init(FMLInitializationEvent event) throws MalformedJsonException {
 		mainConfig.load();
 		ColoringMaterialsManager.init();
 		ColoringToolsManager.init();
@@ -120,8 +118,7 @@ public class ColourfulBlocksBase {
 	}
 
 	@EventHandler
-	public void postinit(FMLPostInitializationEvent event)
-	{ 
+	public void postInit(FMLPostInitializationEvent event) { 
 		proxy.postInit(event);
 	}
 
