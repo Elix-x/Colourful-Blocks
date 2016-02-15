@@ -239,9 +239,9 @@ public class ColoringMaterialsManager {
 					}
 				}
 				if(red.length > 0 && green.length > 0 && blue.length > 0){
-					int r = AdvancedMathUtils.average(red[0], ArrayUtils.subarray(red, 1, red.length));
-					int g = AdvancedMathUtils.average(green[0], ArrayUtils.subarray(green, 1, green.length));
-					int b = AdvancedMathUtils.average(blue[0], ArrayUtils.subarray(blue, 1, blue.length));
+					int r = AdvancedMathUtils.average(red);
+					int g = AdvancedMathUtils.average(green);
+					int b = AdvancedMathUtils.average(blue);
 					color = new RGBA(r, g, b);
 				}
 			}
@@ -434,7 +434,7 @@ public class ColoringMaterialsManager {
 									}
 								}
 								if(r.length > 0 && g.length > 0 && b.length > 0){
-									mat.color = AdvancedMathUtils.average(r[0], ArrayUtils.subarray(r, 1, r.length)) + ":" + AdvancedMathUtils.average(g[0], ArrayUtils.subarray(g, 1, g.length)) + ":" + AdvancedMathUtils.average(b[0], ArrayUtils.subarray(b, 1, b.length));
+									mat.color = AdvancedMathUtils.average(r) + ":" + AdvancedMathUtils.average(g) + ":" + AdvancedMathUtils.average(b);
 								}
 							}
 						}
