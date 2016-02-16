@@ -1,21 +1,25 @@
 package code.elix_x.coremods.colourfulblocks.color;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
+
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 
 import code.elix_x.coremods.colourfulblocks.ColourfulBlocksBase;
 import code.elix_x.coremods.colourfulblocks.net.ColorfulBlocksSyncMessage;
 import code.elix_x.excore.utils.color.RGBA;
 import code.elix_x.excore.utils.nbt.mbt.MBT;
 import code.elix_x.excore.utils.pos.BlockPos;
+import code.elix_x.excore.utils.pos.DimBlockPos;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -26,22 +30,31 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.world.WorldEvent.Load;
 
 public class ColoredBlocksManager extends WorldSavedData {
+
+	public static final Logger logger = LogManager.getLogger("Colored Blocks Manager");
+
+	private static final MBT mbt = new MBT();
 
 	public static final String NAME = "Colored Blocks";
 
 	public static final int DEFAULTCOLOR = 16777215;
 
-	public static final Logger logger = LogManager.getLogger("Colored Blocks Manager");
+	private static Multimap<Integer, Pair<BlockPos, RGBA>> coloredBlocksQueue;
 
 	public static ColoredBlocksManager get(World world){
 		ColoredBlocksManager manager = (ColoredBlocksManager) world.perWorldStorage.loadData(ColoredBlocksManager.class, NAME);
 		if(manager == null){
 			manager = new ColoredBlocksManager(NAME);
 			manager.dimId = world.provider.dimensionId;
+			if(coloredBlocksQueue != null && !world.isRemote){
+				for(Pair<BlockPos, RGBA> p : coloredBlocksQueue.removeAll(manager.dimId)){
+					manager.coloredBlocks.put(p.getKey(), p.getValue());
+				}
+				manager.markDirty();
+				manager.syncMapWith(null);
+			}
 			world.perWorldStorage.setData(NAME, manager);
 		}
 		return manager;
@@ -63,7 +76,10 @@ public class ColoredBlocksManager extends WorldSavedData {
 		if(renderblocks.blockAccess instanceof World) get((World) renderblocks.blockAccess).recolorBlock(x, y, z);
 	}
 
-	private final MBT mbt = new MBT();
+	public static void enqueueOldColoredBlock(DimBlockPos pos, RGBA rgba){
+		if(coloredBlocksQueue == null) coloredBlocksQueue = HashMultimap.create();
+		coloredBlocksQueue.put(pos.dimId, new ImmutablePair(new BlockPos(pos.x, pos.y, pos.z), rgba));
+	}
 
 	private int dimId;
 
@@ -143,46 +159,6 @@ public class ColoredBlocksManager extends WorldSavedData {
 		} else {
 			ColourfulBlocksBase.net.sendToAll(new ColorfulBlocksSyncMessage(dimId, nbt));
 		}
-	}
-
-	public static class Events{
-
-		public Events() {
-
-		}
-
-		@SubscribeEvent
-		public void load(Load event){
-			if(event.world.provider.dimensionId == 0){
-				File file = new File(event.world.getSaveHandler().getWorldDirectory(), "coloredBlocks.dat");
-				if(file.exists()){
-					/*NBTTagCompound nbt = null;
-					try {
-						nbt = CompressedStreamTools.read(file);
-					} catch (IOException e) {
-						logger.error("Caught exception while reading file: ", e);
-					}
-					if(nbt != null){
-						NBTTagList list = (NBTTagList) nbt.getTag("list");
-						for(int i = 0; i < list.tagCount(); i++){
-							NBTTagCompound tag = list.getCompoundTagAt(i);
-							get(MinecraftServer.getServer().worldServerForDimension(DimBlockPos.createFromNBT(tag).dimId)).coloredBlocks.put(BlockPos.createFromNBT(tag), RGBA.createFromNBT(tag));
-						}
-					}
-					file.delete();*/
-				}
-			}
-		}
-
-		@SubscribeEvent
-		public void join(EntityJoinWorldEvent event){
-			if(!event.world.isRemote){
-				if(event.entity instanceof EntityPlayerMP){
-					get(event.world).syncMapWith((EntityPlayerMP) event.entity);
-				}
-			}
-		}
-
 	}
 
 }

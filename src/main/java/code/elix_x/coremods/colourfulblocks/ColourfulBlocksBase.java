@@ -14,6 +14,7 @@ import code.elix_x.coremods.colourfulblocks.color.material.ColoringMaterialsMana
 import code.elix_x.coremods.colourfulblocks.color.material.ColoringToolMaterial;
 import code.elix_x.coremods.colourfulblocks.color.tool.ColoringToolProvider;
 import code.elix_x.coremods.colourfulblocks.color.tool.ColoringToolsManager;
+import code.elix_x.coremods.colourfulblocks.events.SyncColoredBlocksEvent;
 import code.elix_x.coremods.colourfulblocks.events.MainipulatePaintEvent;
 import code.elix_x.coremods.colourfulblocks.items.ItemBrush;
 import code.elix_x.coremods.colourfulblocks.net.ColorChangeMessage;
@@ -129,7 +130,7 @@ public class ColourfulBlocksBase {
 		ColoringToolsManager.init();
 		mainConfig.save();
 
-		MinecraftForge.EVENT_BUS.register(new ColoredBlocksManager.Events());
+		MinecraftForge.EVENT_BUS.register(new SyncColoredBlocksEvent());
 		MinecraftForge.EVENT_BUS.register(new MainipulatePaintEvent());
 
 		proxy.init(event);
