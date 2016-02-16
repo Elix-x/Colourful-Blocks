@@ -64,10 +64,10 @@ public class ColourfulBlocksBase {
 	public void preInit(FMLPreInitializationEvent event) { 
 		net = new SmartNetworkWrapper(NAME);
 		//		net.registerMessage(ColorfulBlocksSyncMessage.ColorfulBlocksSyncMessageHandler.class, ColorfulBlocksSyncMessage.class, 0, Side.CLIENT);
-		net.registerMessage3(new Function<ColorfulBlocksSyncMessage, Runnable>() {
+		net.registerMessage3(new Function<ColorfulBlocksSyncMessage, Runnable>(){
 
 			@Override
-			public Runnable apply(final ColorfulBlocksSyncMessage message) {
+			public Runnable apply(final ColorfulBlocksSyncMessage message){
 				return new Runnable(){
 
 					@Override
@@ -101,20 +101,20 @@ public class ColourfulBlocksBase {
 
 		mainConfig.save();
 
-		ColoringToolsManager.registerProvider(new ColoringToolProvider<ItemBrush>() {
+		ColoringToolsManager.registerProvider(new ColoringToolProvider<ItemBrush>(){
 
 			@Override
-			public String getConfigOptionName() {
+			public String getConfigOptionName(){
 				return "brushes";
 			}
 
 			@Override
-			public String getRecipeType() {
+			public String getRecipeType(){
 				return ColoringMaterialsManager.RECIPETYPEBRUSH;
 			}
 
 			@Override
-			public ItemBrush provide(ColoringToolMaterial material) {
+			public ItemBrush provide(ColoringToolMaterial material){
 				return new ItemBrush(material);
 			}
 
@@ -137,7 +137,7 @@ public class ColourfulBlocksBase {
 	}
 
 	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) { 
+	public void postInit(FMLPostInitializationEvent event){ 
 		proxy.postInit(event);
 	}
 

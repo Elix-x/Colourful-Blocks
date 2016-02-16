@@ -61,19 +61,18 @@ public class ColoredBlocksManager extends WorldSavedData {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static int getBlockColor(IBlockAccess world, int x, int y, int z) {
-		if(world instanceof World) return get((World) world).getBlockColor(x, y, z);
-		return DEFAULTCOLOR;
+	public static int getBlockColor(IBlockAccess world, int x, int y, int z){
+		return get(Minecraft.getMinecraft().theWorld).getBlockColor(x, y, z);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static void recolorTileEntity(TileEntity tileentity) {
+	public static void recolorTileEntity(TileEntity tileentity){
 		get(tileentity.getWorldObj()).recolorBlock(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static void recolorBlock(RenderBlocks renderblocks, int x, int y, int z) {
-		if(renderblocks.blockAccess instanceof World) get((World) renderblocks.blockAccess).recolorBlock(x, y, z);
+	public static void recolorBlock(RenderBlocks renderblocks, int x, int y, int z){
+		get(Minecraft.getMinecraft().theWorld).recolorBlock(x, y, z);
 	}
 
 	public static void enqueueOldColoredBlock(DimBlockPos pos, RGBA rgba){
@@ -90,7 +89,7 @@ public class ColoredBlocksManager extends WorldSavedData {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public int getBlockColor(int x, int y, int z) {
+	public int getBlockColor(int x, int y, int z){
 		RGBA rgba = getRGBA(new BlockPos(x, y, z));
 		try{
 			if(Loader.isModLoaded("powerofbreathing") && (Boolean) Class.forName("code.elix_x.mods.powerofbreathing.events.NyanEvents").getMethod("isGoing").invoke(null)){
@@ -113,15 +112,15 @@ public class ColoredBlocksManager extends WorldSavedData {
 		}
 	}
 
-	public boolean hasRGBA(BlockPos pos) {
+	public boolean hasRGBA(BlockPos pos){
 		return coloredBlocks.containsKey(pos);	
 	}
 
-	public RGBA getRGBA(BlockPos pos) {
+	public RGBA getRGBA(BlockPos pos){
 		return coloredBlocks.get(pos);	
 	}
 
-	public void addRGBA(BlockPos pos, RGBA rgba) {
+	public void addRGBA(BlockPos pos, RGBA rgba){
 		coloredBlocks.put(pos, rgba);
 		syncMapWith(null);
 		markDirty();
@@ -130,7 +129,7 @@ public class ColoredBlocksManager extends WorldSavedData {
 		}
 	}
 
-	public void removeRGBA(BlockPos pos) {
+	public void removeRGBA(BlockPos pos){
 		coloredBlocks.remove(pos);
 		syncMapWith(null);
 		markDirty();
@@ -140,13 +139,13 @@ public class ColoredBlocksManager extends WorldSavedData {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
+	public void readFromNBT(NBTTagCompound nbt){
 		dimId = nbt.getInteger("dimId");
 		coloredBlocks = mbt.fromNBT(nbt.getTag(NAME), Map.class, BlockPos.class, RGBA.class);
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public void writeToNBT(NBTTagCompound nbt){
 		nbt.setInteger("dimId", dimId);
 		nbt.setTag(NAME, mbt.toNBT(coloredBlocks));
 	}

@@ -14,10 +14,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 
 public class MainipulatePaintEvent {
 
-	public MainipulatePaintEvent() {
-
-	}
-
 	@SubscribeEvent
 	public void manipulate(PlayerInteractEvent event){
 		if(event.action == Action.LEFT_CLICK_BLOCK){
