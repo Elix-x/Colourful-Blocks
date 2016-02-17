@@ -214,18 +214,13 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 
 	public RGBA getCurrentRGBA(ItemStack itemstack){
 		fixTags(itemstack);
-		NBTTagCompound nbt = getColorTag(itemstack);
-		return new RGBA(nbt.getInteger("r"), nbt.getInteger("g"), nbt.getInteger("b"), nbt.getInteger("a"));
+		return RGBA.createFromNBT(getColorTag(itemstack));
 	}
 
 	public void setCurrentRGBA(ItemStack itemstack, RGBA rgba){
 		fixTags(itemstack);
 		NBTTagCompound nbt = getColorTag(itemstack);
-		nbt.setInteger("r", rgba.r);
-		nbt.setInteger("g", rgba.g);
-		nbt.setInteger("b", rgba.b);
-		nbt.setInteger("a", rgba.a);
-		setColorTag(itemstack, nbt);
+		setColorTag(itemstack, rgba.writeToNBT(nbt));
 	}
 
 	public double getBuffer(ItemStack itemstack){

@@ -428,9 +428,9 @@ public class ColoringMaterialsManager {
 								for(GsonConversionRecipeEntry ing : mat.ingredients){
 									if(ItemStackStringTranslator.isValidItemstack(ing.value)){
 										RGBA rgba = recognizeColorToRGBA(ItemStackStringTranslator.fromString(ing.value));
-										r = ArrayUtils.add(r, rgba.r);
-										g = ArrayUtils.add(g, rgba.g);
-										b = ArrayUtils.add(b, rgba.b);
+										r = ArrayUtils.add(r, rgba.getR());
+										g = ArrayUtils.add(g, rgba.getG());
+										b = ArrayUtils.add(b, rgba.getB());
 									}
 								}
 								if(r.length > 0 && g.length > 0 && b.length > 0){

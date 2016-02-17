@@ -1,5 +1,8 @@
 package code.elix_x.coremods.colourfulblocks.gui;
 
+import org.lwjgl.opengl.GL11;
+
+import code.elix_x.excore.utils.color.RGBA;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -14,15 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
-import org.lwjgl.opengl.GL11;
-
-import code.elix_x.excore.utils.color.RGBA;
-
 public class CustomItemRenderer {
 
-	//, RenderItem renderItem
-
-//	private static RenderBlocks renderBlocksRi = new RenderBlocks();
 	private static CustomRenderBlocks renderBlocksRi = new CustomRenderBlocks();
 
 	public static void renderItemIntoGUI(FontRenderer p_77015_1_, TextureManager p_77015_2_, ItemStack p_77015_3_, int p_77015_4_, int p_77015_5_, RenderItem renderItem, RGBA rgba)
@@ -32,7 +28,6 @@ public class CustomItemRenderer {
 
 	public static void renderItemIntoGUI(FontRenderer p_77015_1_, TextureManager p_77015_2_, ItemStack p_77015_3_, int p_77015_4_, int p_77015_5_, RenderItem renderItem, RGBA rgba, boolean renderEffect)
 	{
-		//    	System.out.println(rgba);
 		int k = p_77015_3_.getItemDamage();
 		Object object = p_77015_3_.getIconIndex();
 		int l;
@@ -72,19 +67,16 @@ public class CustomItemRenderer {
 
 			if (renderItem.renderWithColor)
 			{
-//				GL11.glColor4f(f3, f4, f, 1.0F);
-				//                GL11.glColor4d(rgba.r, rgba.g, rgba.b, rgba.a);
-//				System.out.println(rgba);
-				GL11.glColor4f(rgba.r / 255f, rgba.g / 255f, rgba.b / 255f, rgba.a / 255f);
+				GL11.glColor4f(rgba.r, rgba.g, rgba.b, rgba.a);
 			}
 
 			GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 			renderBlocksRi.useInventoryTint = renderItem.renderWithColor;
 			renderBlocksRi.renderBlockAsItem(block, k, 1.0F);
 			renderBlocksRi.useInventoryTint = true;
-			
-			
-			
+
+
+
 
 			if (block.getRenderBlockPass() == 0)
 			{
@@ -130,8 +122,7 @@ public class CustomItemRenderer {
 				if (renderItem.renderWithColor)
 				{
 					GL11.glColor4f(f, f1, f2, 1.0F);
-					//                    GL11.glColor4d(rgba.r, rgba.g, rgba.b, rgba.a);
-					GL11.glColor4f(rgba.r / 255f, rgba.g / 255f, rgba.b / 255f, rgba.a / 255f);
+					GL11.glColor4f(rgba.r, rgba.g, rgba.b, rgba.a);
 				}
 
 				GL11.glDisable(GL11.GL_LIGHTING); //Forge: Make sure that render states are reset, ad renderEffect can derp them up.
@@ -170,9 +161,7 @@ public class CustomItemRenderer {
 
 			if (renderItem.renderWithColor)
 			{
-				GL11.glColor4f(f3, f4, f, 1.0F);
-				//                GL11.glColor4d(rgba.r, rgba.g, rgba.b, rgba.a);
-				GL11.glColor4f(rgba.r / 255f, rgba.g / 255f, rgba.b / 255f, rgba.a / 255f);
+				GL11.glColor4f(rgba.r, rgba.g, rgba.b, rgba.a);
 			}
 
 			GL11.glDisable(GL11.GL_LIGHTING); //Forge: Make sure that render states are reset, a renderEffect can derp them up.

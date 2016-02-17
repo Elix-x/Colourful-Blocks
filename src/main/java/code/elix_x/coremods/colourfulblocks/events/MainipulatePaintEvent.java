@@ -31,7 +31,7 @@ public class MainipulatePaintEvent {
 				if(ColoredBlocksManager.get(event.world).hasRGBA(new BlockPos(event.x, event.y, event.z))){
 					ColoredBlocksManager.get(event.world).removeRGBA(new BlockPos(event.x, event.y, event.z));
 
-					if(ColourfulBlocksBase.consumeWaterOnErase){
+					if(ColourfulBlocksBase.consumeWaterOnErase && !event.entityPlayer.capabilities.isCreativeMode){
 						event.entityPlayer.setCurrentItemOrArmor(0, new ItemStack(Items.glass_bottle));
 					}
 
