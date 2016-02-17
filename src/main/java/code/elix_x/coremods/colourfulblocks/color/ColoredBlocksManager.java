@@ -22,6 +22,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -61,8 +62,19 @@ public class ColoredBlocksManager extends WorldSavedData {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static int getBlockColor(IBlockAccess world, int x, int y, int z){
-		return get(Minecraft.getMinecraft().theWorld).getBlockColor(x, y, z);
+	public static int getBlockColor(IBlockAccess world, Block block, int x, int y, int z, int original){
+		RGBA rgba = get(Minecraft.getMinecraft().theWorld).getBlockColor(x, y, z);
+		if(rgba == null){
+			return original;
+		} else if(original == DEFAULTCOLOR){
+			return rgba.argb();
+		} else {
+			if(ColourfulBlocksBase.multipyOriginalColor){
+				return rgba.mul(new RGBA(original)).argb();
+			} else {
+				return rgba.argb();
+			}
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -89,7 +101,7 @@ public class ColoredBlocksManager extends WorldSavedData {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public int getBlockColor(int x, int y, int z){
+	public RGBA getBlockColor(int x, int y, int z){
 		RGBA rgba = getRGBA(new BlockPos(x, y, z));
 		try{
 			if(Loader.isModLoaded("powerofbreathing") && (Boolean) Class.forName("code.elix_x.mods.powerofbreathing.events.NyanEvents").getMethod("isGoing").invoke(null)){
@@ -98,10 +110,7 @@ public class ColoredBlocksManager extends WorldSavedData {
 		} catch(Exception e){
 
 		}
-		if(rgba != null){
-			return rgba.argb();
-		}
-		return DEFAULTCOLOR;
+		return rgba;
 	}
 
 	@SideOnly(Side.CLIENT)

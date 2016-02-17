@@ -14,8 +14,8 @@ import code.elix_x.coremods.colourfulblocks.color.material.ColoringMaterialsMana
 import code.elix_x.coremods.colourfulblocks.color.material.ColoringToolMaterial;
 import code.elix_x.coremods.colourfulblocks.color.tool.ColoringToolProvider;
 import code.elix_x.coremods.colourfulblocks.color.tool.ColoringToolsManager;
-import code.elix_x.coremods.colourfulblocks.events.SyncColoredBlocksEvent;
 import code.elix_x.coremods.colourfulblocks.events.MainipulatePaintEvent;
+import code.elix_x.coremods.colourfulblocks.events.SyncColoredBlocksEvent;
 import code.elix_x.coremods.colourfulblocks.items.ItemBrush;
 import code.elix_x.coremods.colourfulblocks.net.ColorChangeMessage;
 import code.elix_x.coremods.colourfulblocks.net.ColorChangeMessage.ColorChangeMessageHandler;
@@ -57,6 +57,8 @@ public class ColourfulBlocksBase {
 	public static File mainConfigFile;
 	public static Configuration mainConfig;
 
+	public static boolean multipyOriginalColor;
+
 	public static boolean consumeWaterOnErase;
 	public static boolean consumeWaterOnPaint;
 
@@ -95,6 +97,8 @@ public class ColourfulBlocksBase {
 		}
 		mainConfig = new Configuration(mainConfigFile);
 		mainConfig.load();
+
+		multipyOriginalColor = mainConfig.getBoolean("multiplyOriginalColor", "world", true, "If block has custom color and is colored, result color is multiplication of it's color by paint color.\nIf false, result color is paint color.");
 
 		consumeWaterOnErase = mainConfig.getBoolean("consumeWaterOnErase", "consomation", true, "Consume water from bottle when erasing paint");
 		consumeWaterOnPaint = mainConfig.getBoolean("consumeWaterOnPaint", "consomation", false, "Consume water from bucket when mixing new paint");

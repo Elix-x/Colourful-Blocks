@@ -9,14 +9,12 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
 import net.minecraft.launchwrapper.IClassTransformer;
-import net.minecraft.world.IBlockAccess;
 
 public class ColourfulBlocksTransformer implements IClassTransformer {
 
@@ -24,11 +22,11 @@ public class ColourfulBlocksTransformer implements IClassTransformer {
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes){
-		if(name.equals("net.minecraft.block.Block")){
+		if(name.equals("net.minecraft.client.renderer.RenderBlocks")){
 			logger.info("##################################################");
-			logger.info("Patching Block");
-			byte[] b = patchBlock(name, bytes);
-			logger.info("Patching Block Completed");
+			logger.info("Patching RenderBlocks");
+			byte[] b = patchRenderBlocks(name, bytes);
+			logger.info("Patching RenderBlocks Completed");
 			logger.info("##################################################");
 			return b;
 		}
@@ -40,15 +38,7 @@ public class ColourfulBlocksTransformer implements IClassTransformer {
 			logger.info("##################################################");
 			return b;
 		}
-		if(name.equals("net.minecraft.client.renderer.RenderBlocks")){
-			logger.info("##################################################");
-			logger.info("Patching RenderBlocks");
-			byte[] b = patchRenderBlocks(name, bytes);
-			logger.info("Patching RenderBlocks Completed");
-			logger.info("##################################################");
-			return b;
-		}
-		return bytes;
+		return dynamicPatchBlock(name, transformedName, bytes);
 	}
 
 	private byte[] patchRenderBlocks(String name, byte[] bytes){		
@@ -58,7 +48,7 @@ public class ColourfulBlocksTransformer implements IClassTransformer {
 
 		for(MethodNode method : classNode.methods){
 			if((method.name.equals("renderBlockByRenderType") || method.name.equals("func_147805_b")) && method.desc.equals("(Lnet/minecraft/block/Block;III)Z")){
-				try{
+				try {
 					logger.info("**************************************************");
 					logger.info("Patching renderBlockByRenderType");
 
@@ -81,7 +71,7 @@ public class ColourfulBlocksTransformer implements IClassTransformer {
 					list.add(new VarInsnNode(Opcodes.ILOAD, 2));
 					list.add(new VarInsnNode(Opcodes.ILOAD, 3));
 					list.add(new VarInsnNode(Opcodes.ILOAD, 4));
-					list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, ColourfulBlocksHooks.class.getName().replace(".", "/"), "recolorBlock", "(L" + "net.minecraft.renderer.RenderBlock".replace(".", "/") + ";III)V", false));
+					list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "code.elix_x.coremods.colourfulblocks.core.ColourfulBlocksHooks".replace(".", "/"), "recolorBlock", "(L" + "net.minecraft.renderer.RenderBlock".replace(".", "/") + ";III)V", false));
 					list.add(new LabelNode());
 
 					method.instructions.insert(targetNode.getPrevious().getPrevious().getPrevious(), list);
@@ -89,9 +79,8 @@ public class ColourfulBlocksTransformer implements IClassTransformer {
 
 					logger.info("Patching renderBlockByRenderType Completed");
 					logger.info("**************************************************");
-				}catch(Exception e){
-					logger.info("Patching renderBlockByRenderType Failed With Exception:");
-					e.printStackTrace();
+				} catch(Exception e){
+					logger.error("Patching renderBlockByRenderType Failed With Exception:", e);
 					logger.info("**************************************************");
 				}
 			}
@@ -109,7 +98,7 @@ public class ColourfulBlocksTransformer implements IClassTransformer {
 
 		for(MethodNode method : classNode.methods){
 			if((method.name.equals("renderTileEntity") || method.name.equals("func_147544_a")) && method.desc.equals("(Lnet/minecraft/tileentity/TileEntity;F)V")){
-				try{
+				try {
 					logger.info("**************************************************");
 					logger.info("Patching renderTileEntity");
 
@@ -129,7 +118,7 @@ public class ColourfulBlocksTransformer implements IClassTransformer {
 					InsnList list = new InsnList();
 					list.add(new LabelNode());
 					list.add(new VarInsnNode(Opcodes.ALOAD, 1));
-					list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, ColourfulBlocksHooks.class.getName().replace(".", "/"), "recolorTileEntity", "(L" + "net.minecraft.tileentity.TileEntity".replace(".", "/") + ";)V", false));
+					list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "code.elix_x.coremods.colourfulblocks.core.ColourfulBlocksHooks".replace(".", "/"), "recolorTileEntity", "(L" + "net.minecraft.tileentity.TileEntity".replace(".", "/") + ";)V", false));
 					list.add(new LabelNode());
 
 					method.instructions.insert(targetNode, list);
@@ -137,9 +126,8 @@ public class ColourfulBlocksTransformer implements IClassTransformer {
 
 					logger.info("Patching renderTileEntity Completed");
 					logger.info("**************************************************");
-				}catch(Exception e){
-					logger.info("Patching renderTileEntity Failed With Exception:");
-					e.printStackTrace();
+				} catch(Exception e){
+					logger.error("Patching renderTileEntity Failed With Exception:", e);
 					logger.info("**************************************************");
 				}
 			}
@@ -150,44 +138,61 @@ public class ColourfulBlocksTransformer implements IClassTransformer {
 		return writer.toByteArray();
 	}
 
-	private byte[] patchBlock(String name, byte[] bytes){		
+	private byte[] dynamicPatchBlock(String name, String transformedName, byte[] bytes){
 		ClassNode classNode = new ClassNode();
 		ClassReader classReader = new ClassReader(bytes);
 		classReader.accept(classNode, 0);
 
+		boolean patched = false;
+		Exception error = null;
+
 		for(MethodNode method : classNode.methods){
 			if((method.name.equals("colorMultiplier") || method.name.equals("func_149720_d")) && method.desc.equals("(Lnet/minecraft/world/IBlockAccess;III)I")){
-				try{
-					logger.info("**************************************************");
-					logger.info("Patching colorMultiplier");
-
-
-					InsnList list = new InsnList();
-					list.add(new LabelNode());
-					list.add(new VarInsnNode(Opcodes.ALOAD, 1));
-					list.add(new VarInsnNode(Opcodes.ILOAD, 2));
-					list.add(new VarInsnNode(Opcodes.ILOAD, 3));
-					list.add(new VarInsnNode(Opcodes.ILOAD, 4));
-					list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, ColourfulBlocksHooks.class.getName().replace(".", "/"), "getBlockColor", "(L" + IBlockAccess.class.getName().replace(".", "/") + ";III)I", false));
-					list.add(new InsnNode(Opcodes.IRETURN));
-					list.add(new LabelNode());
-
-					method.instructions.insert(list);
-
-
-					logger.info("Patching colorMultiplier Completed");
-					logger.info("**************************************************");
-				}catch(Exception e){
-					logger.info("Patching colorMultiplier Failed With Exception:");
-					e.printStackTrace();
-					logger.info("**************************************************");
+				try {
+					for(AbstractInsnNode node : method.instructions.toArray()){
+						if(node.getOpcode() == Opcodes.IRETURN){
+							InsnList list = new InsnList();
+							list.add(new VarInsnNode(Opcodes.ALOAD, 1));
+							list.add(new VarInsnNode(Opcodes.ALOAD, 0));
+							list.add(new VarInsnNode(Opcodes.ILOAD, 2));
+							list.add(new VarInsnNode(Opcodes.ILOAD, 3));
+							list.add(new VarInsnNode(Opcodes.ILOAD, 4));
+							list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "code.elix_x.coremods.colourfulblocks.core.ColourfulBlocksHooks".replace(".", "/"), "colorMultiplier", "(ILnet/minecraft/world/IBlockAccess;Lnet/minecraft/block/Block;III)I", false));
+							method.instructions.insertBefore(node, list);
+						}
+					}
+				} catch(Exception e){
+					error = e;
 				}
+				patched = true;
 			}
 		}
 
-		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-		classNode.accept(writer);
-		return writer.toByteArray();
+		if(patched){
+			logger.info("##################################################");
+			logger.info(String.format("Dynamically Patching %s(%s)", name, transformedName));
+
+			logger.info("**************************************************");
+			logger.info("Patching colorMultiplier");
+			if(error != null){
+				logger.error("Patching colorMultiplier Failed With Exception:", error);
+				logger.info("**************************************************");
+			} else {
+				logger.info("Patching colorMultiplier Completed");
+				logger.info("**************************************************");
+			}
+
+			logger.info(String.format("Dynamically Patching %s(%s) Completed", name, transformedName));
+			logger.info("##################################################");
+		}
+
+		if(patched){
+			ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			classNode.accept(writer);
+			return writer.toByteArray();
+		} else {
+			return bytes;
+		}
 	}
 
 }
