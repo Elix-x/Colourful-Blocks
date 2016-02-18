@@ -91,7 +91,7 @@ public class ColoringMaterialsManager {
 	}
 
 	@Deprecated
-	private static void updateOldStuff() {
+	private static void updateOldStuff(){
 		logger.info("Updating old stuff");
 		File oldFile = new File(ColourfulBlocksBase.configFolder, "brushes.json");
 		if(oldFile.exists()){
@@ -115,10 +115,10 @@ public class ColoringMaterialsManager {
 				oldLangDir.mkdir();
 				File newLangDir = new File(portedDir, "lang");
 				newLangDir.mkdir();
-				for(File oldLangFile : oldLangDir.listFiles(new FileFilter() {
+				for(File oldLangFile : oldLangDir.listFiles(new FileFilter(){
 
 					@Override
-					public boolean accept(File file) {
+					public boolean accept(File file){
 						return file.getName().endsWith(".lang");
 					}
 
@@ -128,7 +128,7 @@ public class ColoringMaterialsManager {
 					FileUtils.writeLines(newLangFile, Lists.transform(FileUtils.readLines(oldLangFile), new Function<String, String>(){
 
 						@Override
-						public String apply(String input) {
+						public String apply(String input){
 							return input.replace("brushmaterial", COLORINGTOOLMATERIALLANG);
 						}
 					}));
@@ -162,7 +162,7 @@ public class ColoringMaterialsManager {
 	 * Static getters
 	 */
 
-	public static Map<ColoringToolMaterial, Pair<String, Map<String, Object>>> getAllMaterialsAndRecipes() {
+	public static Map<ColoringToolMaterial, Pair<String, Map<String, Object>>> getAllMaterialsAndRecipes(){
 		return materialRecipe;
 	}
 
@@ -174,28 +174,28 @@ public class ColoringMaterialsManager {
 	 * Helpers
 	 */
 
-	private static ItemStack recognizeRepairItem(ToolMaterial material) {
+	private static ItemStack recognizeRepairItem(ToolMaterial material){
 		return material.getRepairItemStack();
 	}
 
 	@SideOnly(Side.CLIENT)
-	private static String recognizeColorToString(ToolMaterial material) {
+	private static String recognizeColorToString(ToolMaterial material){
 		return recognizeColorToString(recognizeRepairItem(material));
 	}
 
 	@SideOnly(Side.CLIENT)
-	private static String recognizeColorToString(ItemStack itemstack) {
+	private static String recognizeColorToString(ItemStack itemstack){
 		RGBA rgba = recognizeColorToRGBA(itemstack);
-		return rgba.getRF() + ":" + rgba.getGF() + ":" + rgba.getBF();
+		return rgba.getRI() + ":" + rgba.getGI() + ":" + rgba.getBI();
 	}
 
 	@SideOnly(Side.CLIENT)
-	private static RGBA recognizeColorToRGBA(ToolMaterial material) {
+	private static RGBA recognizeColorToRGBA(ToolMaterial material){
 		return recognizeColorToRGBA(recognizeRepairItem(material));
 	}
 
 	@SideOnly(Side.CLIENT)
-	private static RGBA recognizeColorToRGBA(ItemStack itemstack) {
+	private static RGBA recognizeColorToRGBA(ItemStack itemstack){
 		RGBA color = new RGBA(0, 0, 0, 0);
 		if(itemstack != null && itemstack.getItem() != null){
 			ResourceLocation texture = null;
@@ -222,7 +222,7 @@ public class ColoringMaterialsManager {
 				int[] colorBuff = new int[]{};
 				try {
 					colorBuff = TextureUtil.readImageData(Minecraft.getMinecraft().getResourceManager(), texture);
-				} catch (IOException e) {
+				} catch (IOException e){
 					logger.error("Caught exception while parsing texture to get color: ", e);
 				}
 				int[] red = new int[]{};
@@ -251,17 +251,17 @@ public class ColoringMaterialsManager {
 	 * Init Default
 	 */
 
-	private static void initMaterials() {
+	private static void initMaterials(){
 		try {
 			logger.info("Generating vanilla extension materials");
 			initDefaultMaterials();
-		} catch (IOException e) {
+		} catch (IOException e){
 			logger.error("Caught exception while generating vanilla extension materials: ", e);
 		}
 		try {
 			logger.info("Generating generated extension materials");
 			initGenMaterials();
-		} catch (IOException e) {
+		} catch (IOException e){
 			logger.error("Caught exception while generating generated extension materials: ", e);
 		}
 	}
@@ -306,11 +306,11 @@ public class ColoringMaterialsManager {
 		writer.close();
 	}
 
-	private static void initRecipes() {
+	private static void initRecipes(){
 		try {
 			logger.info("Generating vanilla extension recipes");
 			initDefaultRecipes();
-		} catch (IOException e) {
+		} catch (IOException e){
 			logger.error("Caught exception while generating vanilla extension recipes: ", e);
 		}
 	}
@@ -334,17 +334,17 @@ public class ColoringMaterialsManager {
 		writer.close();
 	}
 
-	private static void initLocalisations() {
+	private static void initLocalisations(){
 		try {
 			logger.info("Generating vanilla extension localisations");
 			initDefaultLocalisations();
-		} catch (IOException e) {
+		} catch (IOException e){
 			logger.error("Caught exception while generating vanilla extension localisations: ", e);
 		}
 		try {
 			logger.info("Generating generated extension localisations");
 			initGenLocalisations();
-		} catch (IOException e) {
+		} catch (IOException e){
 			logger.error("Caught exception while generating generated extension localisations: ", e);
 		}
 	}
@@ -400,12 +400,12 @@ public class ColoringMaterialsManager {
 	 * Fix
 	 */
 
-	private static void fixColors() {
+	private static void fixColors(){
 		logger.info("Fixing colors.");
-		for(File file : extensionsDir.listFiles(new FileFilter() {
+		for(File file : extensionsDir.listFiles(new FileFilter(){
 
 			@Override
-			public boolean accept(File file) {
+			public boolean accept(File file){
 				return file.isDirectory();
 			}
 
@@ -458,12 +458,12 @@ public class ColoringMaterialsManager {
 	 * Load
 	 */
 
-	private static void loadMaterials() {
+	private static void loadMaterials(){
 		logger.info("Loading materials");
-		for(File file : extensionsDir.listFiles(new FileFilter() {
+		for(File file : extensionsDir.listFiles(new FileFilter(){
 
 			@Override
-			public boolean accept(File file) {
+			public boolean accept(File file){
 				return file.isDirectory();
 			}
 
@@ -500,12 +500,12 @@ public class ColoringMaterialsManager {
 		}
 	}
 
-	private static void loadRecipes() {
+	private static void loadRecipes(){
 		logger.info("Loading recipes");
-		for(File file : extensionsDir.listFiles(new FileFilter() {
+		for(File file : extensionsDir.listFiles(new FileFilter(){
 
 			@Override
-			public boolean accept(File file) {
+			public boolean accept(File file){
 				return file.isDirectory();
 			}
 
@@ -529,12 +529,12 @@ public class ColoringMaterialsManager {
 		}
 	}
 
-	private static void loadLocalisations() {
+	private static void loadLocalisations(){
 		logger.info("Loading localisations");
-		for(File file : extensionsDir.listFiles(new FileFilter() {
+		for(File file : extensionsDir.listFiles(new FileFilter(){
 
 			@Override
-			public boolean accept(File file) {
+			public boolean accept(File file){
 				return file.isDirectory();
 			}
 
@@ -542,9 +542,9 @@ public class ColoringMaterialsManager {
 			logger.info("Loading localisations from extension " + file.getName());
 			File langDir = new File(file, "lang");
 			langDir.mkdir();
-			for(File lang : langDir.listFiles(new FileFilter() {
+			for(File lang : langDir.listFiles(new FileFilter(){
 				@Override
-				public boolean accept(File file) {
+				public boolean accept(File file){
 					return !file.isDirectory() && file.getName().endsWith(".lang");
 				}
 			})){
@@ -554,7 +554,7 @@ public class ColoringMaterialsManager {
 
 					BufferedReader br = new BufferedReader(new FileReader(lang)) ;
 
-					for(String line; (line = br.readLine()) != null;) {
+					for(String line; (line = br.readLine()) != null;){
 						try{
 							map.put(line.split("=")[0], line.split("=")[1]);
 						} catch(IndexOutOfBoundsException e){
@@ -581,11 +581,11 @@ public class ColoringMaterialsManager {
 
 		private List<GsonMaterialConversion> materials;
 
-		public GsonMaterialsConversion() {
+		public GsonMaterialsConversion(){
 
 		}		
 
-		public GsonMaterialsConversion(List<GsonMaterialConversion> materials) {
+		public GsonMaterialsConversion(List<GsonMaterialConversion> materials){
 			this.materials = materials;
 		}
 
@@ -602,11 +602,11 @@ public class ColoringMaterialsManager {
 			private String recipe;
 			private List<GsonConversionRecipeEntry> ingredients;
 
-			public GsonMaterialConversion() {
+			public GsonMaterialConversion(){
 
 			}
 
-			public GsonMaterialConversion(String name, int durability, double bufferMultiplier, String color, String recipe, List<GsonConversionRecipeEntry> ingredients) {
+			public GsonMaterialConversion(String name, int durability, double bufferMultiplier, String color, String recipe, List<GsonConversionRecipeEntry> ingredients){
 				this.name = name;
 				this.durability = durability;
 				this.bufferMultiplier = bufferMultiplier;
@@ -615,7 +615,7 @@ public class ColoringMaterialsManager {
 				this.ingredients = ingredients;
 			}
 
-			public GsonMaterialConversion(String name, int durability, double bufferMultiplier, String color, String recipe, GsonConversionRecipeEntry... ingredients) {
+			public GsonMaterialConversion(String name, int durability, double bufferMultiplier, String color, String recipe, GsonConversionRecipeEntry... ingredients){
 				this(name, durability, bufferMultiplier, color, recipe, Lists.newArrayList(ingredients));
 			}
 
@@ -624,11 +624,11 @@ public class ColoringMaterialsManager {
 				private String name;
 				private String value;
 
-				public GsonConversionRecipeEntry() {
+				public GsonConversionRecipeEntry(){
 
 				}
 
-				public GsonConversionRecipeEntry(String name, String value) {
+				public GsonConversionRecipeEntry(String name, String value){
 					this.name = name;
 					this.value = value;
 				}
@@ -643,11 +643,11 @@ public class ColoringMaterialsManager {
 
 		private List<GsonRecipeHandlerConversion> recipes;
 
-		public GsonRecipesConversion() {
+		public GsonRecipesConversion(){
 
 		}
 
-		public GsonRecipesConversion(List<GsonRecipeHandlerConversion> recipes) {
+		public GsonRecipesConversion(List<GsonRecipeHandlerConversion> recipes){
 			this.recipes = recipes;
 		}
 
@@ -660,16 +660,16 @@ public class ColoringMaterialsManager {
 			private String name;
 			private List<GsonRecipeConversion> types;
 
-			public GsonRecipeHandlerConversion() {
+			public GsonRecipeHandlerConversion(){
 
 			}
 
-			public GsonRecipeHandlerConversion(String name, List<GsonRecipeConversion> types) {
+			public GsonRecipeHandlerConversion(String name, List<GsonRecipeConversion> types){
 				this.name = name;
 				this.types = types;
 			}
 
-			public GsonRecipeHandlerConversion(String name, GsonRecipeConversion... types) {
+			public GsonRecipeHandlerConversion(String name, GsonRecipeConversion... types){
 				this(name, Lists.newArrayList(types));
 			}
 
@@ -678,11 +678,11 @@ public class ColoringMaterialsManager {
 				private String type;
 				private String[] recipe;
 
-				public GsonRecipeConversion() {
+				public GsonRecipeConversion(){
 
 				}
 
-				public GsonRecipeConversion(String type, String... recipe) {
+				public GsonRecipeConversion(String type, String... recipe){
 					this.type = type;
 					this.recipe = recipe;
 				}
