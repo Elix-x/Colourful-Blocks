@@ -5,9 +5,7 @@ import java.util.List;
 import code.elix_x.coremods.colourfulblocks.ColourfulBlocksBase;
 import code.elix_x.coremods.colourfulblocks.color.material.ColoringMaterialsManager;
 import code.elix_x.coremods.colourfulblocks.color.material.ColoringToolMaterial;
-import code.elix_x.coremods.colourfulblocks.items.ItemBrush;
 import code.elix_x.excore.utils.color.RGBA;
-import code.elix_x.excore.utils.pos.DimBlockPos;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -26,9 +24,9 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	protected ColoringToolMaterial material;
 
 	public final double DEFAULTBUFFER;
-	
+
 	public final String NAME;
-	
+
 	public ColoringTool(ColoringToolMaterial material, double defaultBuffer, String name) {
 		this.material = material;
 		this.DEFAULTBUFFER = defaultBuffer;
@@ -48,7 +46,7 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	public ColoringToolMaterial getMaterial() {
 		return material;
 	}
-	
+
 	@Override
 	public String getRegistryPrefix() {
 		return NAME;
@@ -58,7 +56,7 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	public boolean selectColorOnLeftClickBlock() {
 		return true;
 	}
-	
+
 	@Override
 	public RGBA getCurrentColor(ItemStack itemstack) {
 		return getCurrentRGBA(itemstack);
@@ -280,7 +278,7 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 		}
 		return 16777215;
 	}
-	
+
 	/*
 	 * Name
 	 */
@@ -306,7 +304,7 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 			list.add(StatCollector.translateToLocal("coloringtool.desc.durability") + ": " + (float) (itemstack.getMaxDamage() - itemstack.getItemDamage()) / itemstack.getMaxDamage() * 100  + "%");
 		}
 	}
-	
+
 	/*
 	 * Abstract
 	 */

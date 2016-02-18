@@ -75,9 +75,6 @@ public class CustomItemRenderer {
 			renderBlocksRi.renderBlockAsItem(block, k, 1.0F);
 			renderBlocksRi.useInventoryTint = true;
 
-
-
-
 			if (block.getRenderBlockPass() == 0)
 			{
 				GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
@@ -132,11 +129,6 @@ public class CustomItemRenderer {
 
 				GL11.glDisable(GL11.GL_ALPHA_TEST);
 				GL11.glEnable(GL11.GL_LIGHTING);
-
-				/*if (renderEffect && p_77015_3_.hasEffect(l))
-                {
-                    renderEffect(p_77015_2_, p_77015_4_, p_77015_5_);
-                }*/
 			}
 
 			GL11.glEnable(GL11.GL_LIGHTING);
@@ -173,11 +165,6 @@ public class CustomItemRenderer {
 			GL11.glEnable(GL11.GL_LIGHTING);
 			GL11.glDisable(GL11.GL_ALPHA_TEST);
 			GL11.glDisable(GL11.GL_BLEND);
-
-			/* if (renderEffect && p_77015_3_.hasEffect(0))
-            {
-                renderEffect(p_77015_2_, p_77015_4_, p_77015_5_);
-            }*/
 			GL11.glEnable(GL11.GL_LIGHTING);
 		}
 

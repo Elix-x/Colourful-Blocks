@@ -7,8 +7,6 @@ import java.util.function.Function;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.gson.stream.MalformedJsonException;
-
 import code.elix_x.coremods.colourfulblocks.color.ColoredBlocksManager;
 import code.elix_x.coremods.colourfulblocks.color.material.ColoringMaterialsManager;
 import code.elix_x.coremods.colourfulblocks.color.material.ColoringToolMaterial;
@@ -49,7 +47,7 @@ public class ColourfulBlocksBase {
 	@SidedProxy(clientSide = "code.elix_x.coremods.colourfulblocks.proxy.ClientProxy", serverSide = "code.elix_x.coremods.colourfulblocks.proxy.CommonProxy")
 	public static CommonProxy proxy;
 
-	public static final Logger logger = LogManager.getLogger(NAME + " Base");
+	public static final Logger logger = LogManager.getLogger(NAME);
 
 	public static SmartNetworkWrapper net;
 
@@ -63,9 +61,8 @@ public class ColourfulBlocksBase {
 	public static boolean consumeWaterOnPaint;
 
 	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) { 
+	public void preInit(FMLPreInitializationEvent event){ 
 		net = new SmartNetworkWrapper(NAME);
-		//		net.registerMessage(ColorfulBlocksSyncMessage.ColorfulBlocksSyncMessageHandler.class, ColorfulBlocksSyncMessage.class, 0, Side.CLIENT);
 		net.registerMessage3(new Function<ColorfulBlocksSyncMessage, Runnable>(){
 
 			@Override
@@ -128,7 +125,7 @@ public class ColourfulBlocksBase {
 	}
 
 	@EventHandler
-	public void init(FMLInitializationEvent event) throws MalformedJsonException {
+	public void init(FMLInitializationEvent event){
 		mainConfig.load();
 		ColoringMaterialsManager.init();
 		ColoringToolsManager.init();
