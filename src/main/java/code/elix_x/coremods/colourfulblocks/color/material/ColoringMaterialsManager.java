@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +49,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 
 public class ColoringMaterialsManager {
 
@@ -188,7 +186,7 @@ public class ColoringMaterialsManager {
 	@SideOnly(Side.CLIENT)
 	private static String recognizeColorToString(ItemStack itemstack) {
 		RGBA rgba = recognizeColorToRGBA(itemstack);
-		return rgba.r + ":" + rgba.g + ":" + rgba.b;
+		return rgba.getRF() + ":" + rgba.getGF() + ":" + rgba.getBF();
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -239,9 +237,9 @@ public class ColoringMaterialsManager {
 					}
 				}
 				if(red.length > 0 && green.length > 0 && blue.length > 0){
-					int r = AdvancedMathUtils.average(red[0], ArrayUtils.subarray(red, 1, red.length));
-					int g = AdvancedMathUtils.average(green[0], ArrayUtils.subarray(green, 1, green.length));
-					int b = AdvancedMathUtils.average(blue[0], ArrayUtils.subarray(blue, 1, blue.length));
+					int r = AdvancedMathUtils.average(red);
+					int g = AdvancedMathUtils.average(green);
+					int b = AdvancedMathUtils.average(blue);
 					color = new RGBA(r, g, b);
 				}
 			}
@@ -428,13 +426,13 @@ public class ColoringMaterialsManager {
 								for(GsonConversionRecipeEntry ing : mat.ingredients){
 									if(ItemStackStringTranslator.isValidItemstack(ing.value)){
 										RGBA rgba = recognizeColorToRGBA(ItemStackStringTranslator.fromString(ing.value));
-										r = ArrayUtils.add(r, rgba.r);
-										g = ArrayUtils.add(g, rgba.g);
-										b = ArrayUtils.add(b, rgba.b);
+										r = ArrayUtils.add(r, rgba.getRI());
+										g = ArrayUtils.add(g, rgba.getGI());
+										b = ArrayUtils.add(b, rgba.getBI());
 									}
 								}
 								if(r.length > 0 && g.length > 0 && b.length > 0){
-									mat.color = AdvancedMathUtils.average(r[0], ArrayUtils.subarray(r, 1, r.length)) + ":" + AdvancedMathUtils.average(g[0], ArrayUtils.subarray(g, 1, g.length)) + ":" + AdvancedMathUtils.average(b[0], ArrayUtils.subarray(b, 1, b.length));
+									mat.color = AdvancedMathUtils.average(r) + ":" + AdvancedMathUtils.average(g) + ":" + AdvancedMathUtils.average(b);
 								}
 							}
 						}

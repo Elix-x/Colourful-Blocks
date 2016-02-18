@@ -5,9 +5,7 @@ import java.util.List;
 import code.elix_x.coremods.colourfulblocks.ColourfulBlocksBase;
 import code.elix_x.coremods.colourfulblocks.color.material.ColoringMaterialsManager;
 import code.elix_x.coremods.colourfulblocks.color.material.ColoringToolMaterial;
-import code.elix_x.coremods.colourfulblocks.items.ItemBrush;
 import code.elix_x.excore.utils.color.RGBA;
-import code.elix_x.excore.utils.pos.DimBlockPos;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -26,9 +24,9 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	protected ColoringToolMaterial material;
 
 	public final double DEFAULTBUFFER;
-	
+
 	public final String NAME;
-	
+
 	public ColoringTool(ColoringToolMaterial material, double defaultBuffer, String name) {
 		this.material = material;
 		this.DEFAULTBUFFER = defaultBuffer;
@@ -48,7 +46,7 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	public ColoringToolMaterial getMaterial() {
 		return material;
 	}
-	
+
 	@Override
 	public String getRegistryPrefix() {
 		return NAME;
@@ -58,7 +56,7 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	public boolean selectColorOnLeftClickBlock() {
 		return true;
 	}
-	
+
 	@Override
 	public RGBA getCurrentColor(ItemStack itemstack) {
 		return getCurrentRGBA(itemstack);
@@ -214,18 +212,13 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 
 	public RGBA getCurrentRGBA(ItemStack itemstack){
 		fixTags(itemstack);
-		NBTTagCompound nbt = getColorTag(itemstack);
-		return new RGBA(nbt.getInteger("r"), nbt.getInteger("g"), nbt.getInteger("b"), nbt.getInteger("a"));
+		return RGBA.createFromNBT(getColorTag(itemstack));
 	}
 
 	public void setCurrentRGBA(ItemStack itemstack, RGBA rgba){
 		fixTags(itemstack);
 		NBTTagCompound nbt = getColorTag(itemstack);
-		nbt.setInteger("r", rgba.r);
-		nbt.setInteger("g", rgba.g);
-		nbt.setInteger("b", rgba.b);
-		nbt.setInteger("a", rgba.a);
-		setColorTag(itemstack, nbt);
+		setColorTag(itemstack, rgba.writeToNBT(nbt));
 	}
 
 	public double getBuffer(ItemStack itemstack){
@@ -285,7 +278,7 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 		}
 		return 16777215;
 	}
-	
+
 	/*
 	 * Name
 	 */
@@ -298,20 +291,20 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean shift) {
 		if(GuiScreen.isShiftKeyDown()){
-			list.add(StatCollector.translateToLocal("coloringtool.desc.color.red") + ": " + getCurrentRGBA(itemstack).r / 255f * 100f + "% (" + getCurrentRGBA(itemstack).r + "/255)");
-			list.add(StatCollector.translateToLocal("coloringtool.desc.color.green") + ": " + getCurrentRGBA(itemstack).g / 255f * 100f + "% (" + getCurrentRGBA(itemstack).r + "/255)");
-			list.add(StatCollector.translateToLocal("coloringtool.desc.color.blue") + ": " + getCurrentRGBA(itemstack).b / 255f * 100f + "% (" + getCurrentRGBA(itemstack).r + "/255)");
+			list.add(StatCollector.translateToLocal("coloringtool.desc.color.red") + ": " + getCurrentRGBA(itemstack).getRF() * 100f + "% (" + getCurrentRGBA(itemstack).getRI() + "/255)");
+			list.add(StatCollector.translateToLocal("coloringtool.desc.color.green") + ": " + getCurrentRGBA(itemstack).getGF() * 100f + "% (" + getCurrentRGBA(itemstack).getGI() + "/255)");
+			list.add(StatCollector.translateToLocal("coloringtool.desc.color.blue") + ": " + getCurrentRGBA(itemstack).getBF() * 100f + "% (" + getCurrentRGBA(itemstack).getBI() + "/255)");
 			list.add(StatCollector.translateToLocal("coloringtool.desc.buffer") + ": " + (double) getBuffer(itemstack) / (DEFAULTBUFFER * material.bufferMultiplier) * 100 + "% (" + getBuffer(itemstack) + "/" + DEFAULTBUFFER * material.bufferMultiplier + ")");
 			list.add(StatCollector.translateToLocal("coloringtool.desc.durability") + ": " + (float) (itemstack.getMaxDamage() - itemstack.getItemDamage()) / itemstack.getMaxDamage() * 100  + "% (" + itemstack.getItemDamage() + "/" + itemstack.getMaxDamage() + ")");
 		} else {
-			list.add(StatCollector.translateToLocal("coloringtool.desc.color.red") + ": " + getCurrentRGBA(itemstack).r / 255f * 100f + "%");
-			list.add(StatCollector.translateToLocal("coloringtool.desc.color.green") + ": " + getCurrentRGBA(itemstack).g / 255f * 100f + "%");
-			list.add(StatCollector.translateToLocal("coloringtool.desc.color.blue") + ": " + getCurrentRGBA(itemstack).b / 255f * 100f + "%");
+			list.add(StatCollector.translateToLocal("coloringtool.desc.color.red") + ": " + getCurrentRGBA(itemstack).getRF() * 100f + "%");
+			list.add(StatCollector.translateToLocal("coloringtool.desc.color.green") + ": " + getCurrentRGBA(itemstack).getGF() * 100f + "%");
+			list.add(StatCollector.translateToLocal("coloringtool.desc.color.blue") + ": " + getCurrentRGBA(itemstack).getBF() * 100f + "%");
 			list.add(StatCollector.translateToLocal("coloringtool.desc.buffer") + ": " + (double) getBuffer(itemstack) / (DEFAULTBUFFER * material.bufferMultiplier) * 100 + "%");
 			list.add(StatCollector.translateToLocal("coloringtool.desc.durability") + ": " + (float) (itemstack.getMaxDamage() - itemstack.getItemDamage()) / itemstack.getMaxDamage() * 100  + "%");
 		}
 	}
-	
+
 	/*
 	 * Abstract
 	 */
