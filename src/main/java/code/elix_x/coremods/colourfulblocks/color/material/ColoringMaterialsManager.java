@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +49,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 
 public class ColoringMaterialsManager {
 
@@ -188,7 +186,7 @@ public class ColoringMaterialsManager {
 	@SideOnly(Side.CLIENT)
 	private static String recognizeColorToString(ItemStack itemstack) {
 		RGBA rgba = recognizeColorToRGBA(itemstack);
-		return rgba.r + ":" + rgba.g + ":" + rgba.b;
+		return rgba.getRF() + ":" + rgba.getGF() + ":" + rgba.getBF();
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -428,9 +426,9 @@ public class ColoringMaterialsManager {
 								for(GsonConversionRecipeEntry ing : mat.ingredients){
 									if(ItemStackStringTranslator.isValidItemstack(ing.value)){
 										RGBA rgba = recognizeColorToRGBA(ItemStackStringTranslator.fromString(ing.value));
-										r = ArrayUtils.add(r, rgba.getR());
-										g = ArrayUtils.add(g, rgba.getG());
-										b = ArrayUtils.add(b, rgba.getB());
+										r = ArrayUtils.add(r, rgba.getRI());
+										g = ArrayUtils.add(g, rgba.getGI());
+										b = ArrayUtils.add(b, rgba.getBI());
 									}
 								}
 								if(r.length > 0 && g.length > 0 && b.length > 0){

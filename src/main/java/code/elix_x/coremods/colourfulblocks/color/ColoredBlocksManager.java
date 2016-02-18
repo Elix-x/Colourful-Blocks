@@ -70,7 +70,7 @@ public class ColoredBlocksManager extends WorldSavedData {
 			return rgba.argb();
 		} else {
 			if(ColourfulBlocksBase.multipyOriginalColor){
-				return rgba.mul(new RGBA(original)).argb();
+				return rgba.multiply(new RGBA(original)).argb();
 			} else {
 				return rgba.argb();
 			}

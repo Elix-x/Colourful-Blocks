@@ -28,7 +28,7 @@ public class SyncColoredBlocksEvent {
 						NBTTagList list = (NBTTagList) nbt.getTag("list");
 						for(int i = 0; i < list.tagCount(); i++){
 							NBTTagCompound tag = list.getCompoundTagAt(i);
-							ColoredBlocksManager.enqueueOldColoredBlock(DimBlockPos.createFromNBT(tag), RGBA.createFromNBTI(tag));
+							ColoredBlocksManager.enqueueOldColoredBlock(DimBlockPos.createFromNBT(tag), RGBA.createFromNBT(tag));
 						}
 					}
 				} catch (IOException e){

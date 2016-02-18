@@ -293,15 +293,15 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean shift) {
 		if(GuiScreen.isShiftKeyDown()){
-			list.add(StatCollector.translateToLocal("coloringtool.desc.color.red") + ": " + getCurrentRGBA(itemstack).r / 255f * 100f + "% (" + getCurrentRGBA(itemstack).r + "/255)");
-			list.add(StatCollector.translateToLocal("coloringtool.desc.color.green") + ": " + getCurrentRGBA(itemstack).g / 255f * 100f + "% (" + getCurrentRGBA(itemstack).r + "/255)");
-			list.add(StatCollector.translateToLocal("coloringtool.desc.color.blue") + ": " + getCurrentRGBA(itemstack).b / 255f * 100f + "% (" + getCurrentRGBA(itemstack).r + "/255)");
+			list.add(StatCollector.translateToLocal("coloringtool.desc.color.red") + ": " + getCurrentRGBA(itemstack).getRF() * 100f + "% (" + getCurrentRGBA(itemstack).getRI() + "/255)");
+			list.add(StatCollector.translateToLocal("coloringtool.desc.color.green") + ": " + getCurrentRGBA(itemstack).getGF() * 100f + "% (" + getCurrentRGBA(itemstack).getGI() + "/255)");
+			list.add(StatCollector.translateToLocal("coloringtool.desc.color.blue") + ": " + getCurrentRGBA(itemstack).getBF() * 100f + "% (" + getCurrentRGBA(itemstack).getBI() + "/255)");
 			list.add(StatCollector.translateToLocal("coloringtool.desc.buffer") + ": " + (double) getBuffer(itemstack) / (DEFAULTBUFFER * material.bufferMultiplier) * 100 + "% (" + getBuffer(itemstack) + "/" + DEFAULTBUFFER * material.bufferMultiplier + ")");
 			list.add(StatCollector.translateToLocal("coloringtool.desc.durability") + ": " + (float) (itemstack.getMaxDamage() - itemstack.getItemDamage()) / itemstack.getMaxDamage() * 100  + "% (" + itemstack.getItemDamage() + "/" + itemstack.getMaxDamage() + ")");
 		} else {
-			list.add(StatCollector.translateToLocal("coloringtool.desc.color.red") + ": " + getCurrentRGBA(itemstack).r / 255f * 100f + "%");
-			list.add(StatCollector.translateToLocal("coloringtool.desc.color.green") + ": " + getCurrentRGBA(itemstack).g / 255f * 100f + "%");
-			list.add(StatCollector.translateToLocal("coloringtool.desc.color.blue") + ": " + getCurrentRGBA(itemstack).b / 255f * 100f + "%");
+			list.add(StatCollector.translateToLocal("coloringtool.desc.color.red") + ": " + getCurrentRGBA(itemstack).getRF() * 100f + "%");
+			list.add(StatCollector.translateToLocal("coloringtool.desc.color.green") + ": " + getCurrentRGBA(itemstack).getGF() * 100f + "%");
+			list.add(StatCollector.translateToLocal("coloringtool.desc.color.blue") + ": " + getCurrentRGBA(itemstack).getBF() * 100f + "%");
 			list.add(StatCollector.translateToLocal("coloringtool.desc.buffer") + ": " + (double) getBuffer(itemstack) / (DEFAULTBUFFER * material.bufferMultiplier) * 100 + "%");
 			list.add(StatCollector.translateToLocal("coloringtool.desc.durability") + ": " + (float) (itemstack.getMaxDamage() - itemstack.getItemDamage()) / itemstack.getMaxDamage() * 100  + "%");
 		}

@@ -46,9 +46,9 @@ public class GuiSelectColor extends GuiScreen {
 		xSize = 248;
 		ySize = 166;
 
-		r = rgba.r;
-		g = rgba.g;
-		b = rgba.b;
+		r = rgba.getRF();
+		g = rgba.getGF();
+		b = rgba.getBF();
 
 		random = new Random();
 

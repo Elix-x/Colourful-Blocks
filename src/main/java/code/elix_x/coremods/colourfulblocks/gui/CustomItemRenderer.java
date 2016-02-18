@@ -67,7 +67,7 @@ public class CustomItemRenderer {
 
 			if (renderItem.renderWithColor)
 			{
-				GL11.glColor4f(rgba.r, rgba.g, rgba.b, rgba.a);
+				GL11.glColor4f(rgba.getRF(), rgba.getGF(), rgba.getBF(), rgba.getAF());
 			}
 
 			GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
@@ -122,7 +122,7 @@ public class CustomItemRenderer {
 				if (renderItem.renderWithColor)
 				{
 					GL11.glColor4f(f, f1, f2, 1.0F);
-					GL11.glColor4f(rgba.r, rgba.g, rgba.b, rgba.a);
+					GL11.glColor4f(rgba.getRF(), rgba.getGF(), rgba.getBF(), rgba.getAF());
 				}
 
 				GL11.glDisable(GL11.GL_LIGHTING); //Forge: Make sure that render states are reset, ad renderEffect can derp them up.
@@ -161,7 +161,7 @@ public class CustomItemRenderer {
 
 			if (renderItem.renderWithColor)
 			{
-				GL11.glColor4f(rgba.r, rgba.g, rgba.b, rgba.a);
+				GL11.glColor4f(rgba.getRF(), rgba.getGF(), rgba.getBF(), rgba.getAF());
 			}
 
 			GL11.glDisable(GL11.GL_LIGHTING); //Forge: Make sure that render states are reset, a renderEffect can derp them up.
