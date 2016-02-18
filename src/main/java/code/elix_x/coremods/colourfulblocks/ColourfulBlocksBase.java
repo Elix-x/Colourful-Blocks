@@ -39,7 +39,7 @@ public class ColourfulBlocksBase {
 
 	public static final String MODID = "colourfullblocks";
 	public static final String NAME = "Colourful Blocks";
-	public static final String VERSION = "1.2.0";
+	public static final String VERSION = "1.2.1";
 
 	@Mod.Instance(MODID)
 	public static ColourfulBlocksBase instance;
@@ -83,7 +83,13 @@ public class ColourfulBlocksBase {
 		net.registerMessage(new ColorChangeMessageHandler(), ColorChangeMessage.class, Side.SERVER);
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new ColourfulBlocksGuiHandler());
-		configFolder = new File(event.getModConfigurationDirectory(), MODID);
+		configFolder = new File(event.getModConfigurationDirectory(), NAME);
+		if(!configFolder.exists()){
+			File oldConfigFolder = new File(event.getModConfigurationDirectory(), MODID);
+			if(oldConfigFolder.exists()){
+				oldConfigFolder.renameTo(configFolder);
+			}
+		}
 		configFolder.mkdirs();
 
 		mainConfigFile = new File(configFolder, "main.cfg");

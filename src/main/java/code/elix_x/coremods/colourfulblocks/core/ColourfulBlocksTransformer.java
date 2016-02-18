@@ -1,5 +1,7 @@
 package code.elix_x.coremods.colourfulblocks.core;
 
+import java.lang.reflect.Modifier;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
@@ -9,6 +11,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -23,19 +26,19 @@ public class ColourfulBlocksTransformer implements IClassTransformer {
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes){
 		if(name.equals("net.minecraft.client.renderer.RenderBlocks")){
-			logger.info("##################################################");
-			logger.info("Patching RenderBlocks");
+			logger.debug("##################################################");
+			logger.debug("Patching RenderBlocks");
 			byte[] b = patchRenderBlocks(name, bytes);
-			logger.info("Patching RenderBlocks Completed");
-			logger.info("##################################################");
+			logger.debug("Patching RenderBlocks Completed");
+			logger.debug("##################################################");
 			return b;
 		}
 		if(name.equals("net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher")){
-			logger.info("##################################################");
-			logger.info("Patching TileEntityRendererDispatcher");
+			logger.debug("##################################################");
+			logger.debug("Patching TileEntityRendererDispatcher");
 			byte[] b = patchTileEntityRendererDispatcher(name, bytes);
-			logger.info("Patching TileEntityRendererDispatcher Completed");
-			logger.info("##################################################");
+			logger.debug("Patching TileEntityRendererDispatcher Completed");
+			logger.debug("##################################################");
 			return b;
 		}
 		return dynamicPatchBlock(name, transformedName, bytes);
@@ -49,8 +52,8 @@ public class ColourfulBlocksTransformer implements IClassTransformer {
 		for(MethodNode method : classNode.methods){
 			if((method.name.equals("renderBlockByRenderType") || method.name.equals("func_147805_b")) && method.desc.equals("(Lnet/minecraft/block/Block;III)Z")){
 				try {
-					logger.info("**************************************************");
-					logger.info("Patching renderBlockByRenderType");
+					logger.debug("**************************************************");
+					logger.debug("Patching renderBlockByRenderType");
 
 
 					AbstractInsnNode targetNode = null;
@@ -77,11 +80,11 @@ public class ColourfulBlocksTransformer implements IClassTransformer {
 					method.instructions.insert(targetNode.getPrevious().getPrevious().getPrevious(), list);
 
 
-					logger.info("Patching renderBlockByRenderType Completed");
-					logger.info("**************************************************");
+					logger.debug("Patching renderBlockByRenderType Completed");
+					logger.debug("**************************************************");
 				} catch(Exception e){
 					logger.error("Patching renderBlockByRenderType Failed With Exception:", e);
-					logger.info("**************************************************");
+					logger.debug("**************************************************");
 				}
 			}
 		}
@@ -99,8 +102,8 @@ public class ColourfulBlocksTransformer implements IClassTransformer {
 		for(MethodNode method : classNode.methods){
 			if((method.name.equals("renderTileEntity") || method.name.equals("func_147544_a")) && method.desc.equals("(Lnet/minecraft/tileentity/TileEntity;F)V")){
 				try {
-					logger.info("**************************************************");
-					logger.info("Patching renderTileEntity");
+					logger.debug("**************************************************");
+					logger.debug("Patching renderTileEntity");
 
 
 					AbstractInsnNode targetNode = null;
@@ -124,11 +127,11 @@ public class ColourfulBlocksTransformer implements IClassTransformer {
 					method.instructions.insert(targetNode, list);
 
 
-					logger.info("Patching renderTileEntity Completed");
-					logger.info("**************************************************");
+					logger.debug("Patching renderTileEntity Completed");
+					logger.debug("**************************************************");
 				} catch(Exception e){
 					logger.error("Patching renderTileEntity Failed With Exception:", e);
-					logger.info("**************************************************");
+					logger.debug("**************************************************");
 				}
 			}
 		}
@@ -152,11 +155,19 @@ public class ColourfulBlocksTransformer implements IClassTransformer {
 					for(AbstractInsnNode node : method.instructions.toArray()){
 						if(node.getOpcode() == Opcodes.IRETURN){
 							InsnList list = new InsnList();
-							list.add(new VarInsnNode(Opcodes.ALOAD, 1));
-							list.add(new VarInsnNode(Opcodes.ALOAD, 0));
-							list.add(new VarInsnNode(Opcodes.ILOAD, 2));
-							list.add(new VarInsnNode(Opcodes.ILOAD, 3));
-							list.add(new VarInsnNode(Opcodes.ILOAD, 4));
+							if(Modifier.isStatic(method.access)){
+								list.add(new VarInsnNode(Opcodes.ALOAD, 0));
+								list.add(new InsnNode(Opcodes.ACONST_NULL));
+								list.add(new VarInsnNode(Opcodes.ILOAD, 1));
+								list.add(new VarInsnNode(Opcodes.ILOAD, 2));
+								list.add(new VarInsnNode(Opcodes.ILOAD, 3));
+							} else {
+								list.add(new VarInsnNode(Opcodes.ALOAD, 1));
+								list.add(new VarInsnNode(Opcodes.ALOAD, 0));
+								list.add(new VarInsnNode(Opcodes.ILOAD, 2));
+								list.add(new VarInsnNode(Opcodes.ILOAD, 3));
+								list.add(new VarInsnNode(Opcodes.ILOAD, 4));
+							}
 							list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "code.elix_x.coremods.colourfulblocks.core.ColourfulBlocksHooks".replace(".", "/"), "colorMultiplier", "(ILnet/minecraft/world/IBlockAccess;Lnet/minecraft/block/Block;III)I", false));
 							method.instructions.insertBefore(node, list);
 						}
@@ -169,21 +180,21 @@ public class ColourfulBlocksTransformer implements IClassTransformer {
 		}
 
 		if(patched){
-			logger.info("##################################################");
-			logger.info(String.format("Dynamically Patching %s(%s)", name, transformedName));
+			logger.debug("##################################################");
+			logger.debug(String.format("Dynamically Patching %s(%s)", name, transformedName));
 
-			logger.info("**************************************************");
-			logger.info("Patching colorMultiplier");
+			logger.debug("**************************************************");
+			logger.debug("Patching colorMultiplier");
 			if(error != null){
 				logger.error("Patching colorMultiplier Failed With Exception:", error);
-				logger.info("**************************************************");
+				logger.debug("**************************************************");
 			} else {
-				logger.info("Patching colorMultiplier Completed");
-				logger.info("**************************************************");
+				logger.debug("Patching colorMultiplier Completed");
+				logger.debug("**************************************************");
 			}
 
-			logger.info(String.format("Dynamically Patching %s(%s) Completed", name, transformedName));
-			logger.info("##################################################");
+			logger.debug(String.format("Dynamically Patching %s(%s) Completed", name, transformedName));
+			logger.debug("##################################################");
 		}
 
 		if(patched){
