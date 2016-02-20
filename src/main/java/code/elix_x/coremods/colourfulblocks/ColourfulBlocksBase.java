@@ -2,10 +2,11 @@ package code.elix_x.coremods.colourfulblocks;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.function.Function;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.google.common.base.Function;
 
 import code.elix_x.coremods.colourfulblocks.color.ColoredBlocksManager;
 import code.elix_x.coremods.colourfulblocks.color.material.ColoringMaterialsManager;
@@ -39,7 +40,7 @@ public class ColourfulBlocksBase {
 
 	public static final String MODID = "colourfullblocks";
 	public static final String NAME = "Colourful Blocks";
-	public static final String VERSION = "1.2.1";
+	public static final String VERSION = "1.2.2";
 
 	@Mod.Instance(MODID)
 	public static ColourfulBlocksBase instance;
