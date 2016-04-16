@@ -54,7 +54,7 @@ public class ColoredBlocksManager extends WorldSavedData {
 					manager.coloredBlocks.put(p.getKey(), p.getValue());
 				}
 				manager.markDirty();
-				manager.syncMapWith(null);
+				manager.syncWithAll();
 			}
 			world.perWorldStorage.setData(NAME, manager);
 		}
@@ -131,7 +131,7 @@ public class ColoredBlocksManager extends WorldSavedData {
 
 	public void addRGBA(BlockPos pos, RGBA rgba){
 		coloredBlocks.put(pos, rgba);
-		syncMapWith(null);
+		syncWithAll();
 		markDirty();
 		if(FMLCommonHandler.instance().getSide() == Side.CLIENT){
 			Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(pos.getX(), pos.getY(), pos.getZ());
@@ -140,7 +140,7 @@ public class ColoredBlocksManager extends WorldSavedData {
 
 	public void removeRGBA(BlockPos pos){
 		coloredBlocks.remove(pos);
-		syncMapWith(null);
+		syncWithAll();
 		markDirty();
 		if(FMLCommonHandler.instance().getSide() == Side.CLIENT){
 			Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(pos.getX(), pos.getY(), pos.getZ());
@@ -159,14 +159,16 @@ public class ColoredBlocksManager extends WorldSavedData {
 		nbt.setTag(NAME, mbt.toNBT(coloredBlocks));
 	}
 
-	public void syncMapWith(EntityPlayerMP player){
+	public void syncWith(EntityPlayerMP player){
 		NBTTagCompound nbt = new NBTTagCompound();
 		writeToNBT(nbt);
-		if(player != null){
-			if(!player.worldObj.isRemote) ColourfulBlocksBase.net.sendTo(new ColorfulBlocksSyncMessage(dimId, nbt), player);
-		} else {
-			ColourfulBlocksBase.net.sendToAll(new ColorfulBlocksSyncMessage(dimId, nbt));
-		}
+		ColourfulBlocksBase.net.sendTo(new ColorfulBlocksSyncMessage(dimId, nbt), player);
+	}
+
+	public void syncWithAll(){
+		NBTTagCompound nbt = new NBTTagCompound();
+		writeToNBT(nbt);
+		ColourfulBlocksBase.net.sendToAll(new ColorfulBlocksSyncMessage(dimId, nbt));
 	}
 
 }

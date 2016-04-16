@@ -44,7 +44,7 @@ public class SyncColoredBlocksEvent {
 	public void join(EntityJoinWorldEvent event){
 		if(!event.world.isRemote){
 			if(event.entity instanceof EntityPlayerMP){
-				ColoredBlocksManager.get(event.world).syncMapWith((EntityPlayerMP) event.entity);
+				ColoredBlocksManager.get(event.world).syncWith((EntityPlayerMP) event.entity);
 			}
 		}
 	}
