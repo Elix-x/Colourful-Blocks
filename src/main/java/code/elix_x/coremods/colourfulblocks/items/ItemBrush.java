@@ -9,10 +9,8 @@ import code.elix_x.coremods.colourfulblocks.color.ColoredBlocksManager;
 import code.elix_x.coremods.colourfulblocks.color.material.ColoringToolMaterial;
 import code.elix_x.coremods.colourfulblocks.color.tool.ColoringTool;
 import code.elix_x.coremods.colourfulblocks.color.tool.ColoringToolsManager;
-import code.elix_x.coremods.colourfulblocks.net.ColourfulBlocksGuiHandler;
 import code.elix_x.excore.utils.pos.BlockPos;
 import code.elix_x.excore.utils.pos.DimBlockPos;
-import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -30,7 +28,7 @@ public class ItemBrush extends ColoringTool {
 	/*
 	 * Override
 	 */
-	
+
 	@Override
 	public boolean isAboutToColor(EntityPlayer player, ItemStack itemstack, DimBlockPos pos) {
 		MovingObjectPosition mpos = player.rayTrace(5.0, 0);
@@ -52,14 +50,14 @@ public class ItemBrush extends ColoringTool {
 	protected IIcon registerPaintIcon(IIconRegister reg) {
 		return reg.registerIcon(ColourfulBlocksBase.MODID + ":brushtop");
 	}
-	
+
 	/*
 	 * Use
 	 */
-	
+
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player) {
-		FMLNetworkHandler.openGui(player, ColourfulBlocksBase.instance, ColourfulBlocksGuiHandler.guiIdBrush, player.worldObj, 0, 0, 0);
+		ColourfulBlocksBase.proxy.displayGuiSelectColor(itemstack);
 		return itemstack;
 	}
 

@@ -19,7 +19,6 @@ import code.elix_x.coremods.colourfulblocks.events.SyncColoredBlocksEvent;
 import code.elix_x.coremods.colourfulblocks.items.ItemBrush;
 import code.elix_x.coremods.colourfulblocks.net.ColorChangeMessage;
 import code.elix_x.coremods.colourfulblocks.net.ColorfulBlocksSyncMessage;
-import code.elix_x.coremods.colourfulblocks.net.ColourfulBlocksGuiHandler;
 import code.elix_x.coremods.colourfulblocks.proxy.IColorfulBlocksProxy;
 import code.elix_x.excore.EXCore;
 import code.elix_x.excore.utils.packets.SmartNetworkWrapper;
@@ -29,7 +28,6 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
@@ -97,8 +95,6 @@ public class ColourfulBlocksBase {
 			}
 
 		}, ColorChangeMessage.class, Side.SERVER);
-
-		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new ColourfulBlocksGuiHandler());
 
 		configFolder = new File(event.getModConfigurationDirectory(), NAME);
 		if(!configFolder.exists()){
