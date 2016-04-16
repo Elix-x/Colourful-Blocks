@@ -3,6 +3,7 @@ package code.elix_x.coremods.colourfulblocks;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +18,6 @@ import code.elix_x.coremods.colourfulblocks.events.MainipulatePaintEvent;
 import code.elix_x.coremods.colourfulblocks.events.SyncColoredBlocksEvent;
 import code.elix_x.coremods.colourfulblocks.items.ItemBrush;
 import code.elix_x.coremods.colourfulblocks.net.ColorChangeMessage;
-import code.elix_x.coremods.colourfulblocks.net.ColorChangeMessage.ColorChangeMessageHandler;
 import code.elix_x.coremods.colourfulblocks.net.ColorfulBlocksSyncMessage;
 import code.elix_x.coremods.colourfulblocks.net.ColourfulBlocksGuiHandler;
 import code.elix_x.coremods.colourfulblocks.proxy.CommonProxy;
@@ -30,6 +30,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
@@ -81,9 +82,24 @@ public class ColourfulBlocksBase {
 			}
 
 		}, ColorfulBlocksSyncMessage.class, Side.CLIENT);
-		net.registerMessage(new ColorChangeMessageHandler(), ColorChangeMessage.class, Side.SERVER);
+		net.registerMessage1(new Function<Pair<ColorChangeMessage, MessageContext>, Runnable>(){
+
+			@Override
+			public Runnable apply(final Pair<ColorChangeMessage, MessageContext> pair){
+				return new Runnable(){
+
+					@Override
+					public void run(){
+						ColoringToolsManager.updateColor(pair.getRight().getServerHandler().playerEntity, pair.getLeft().rgba);
+					}
+
+				};
+			}
+
+		}, ColorChangeMessage.class, Side.SERVER);
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new ColourfulBlocksGuiHandler());
+
 		configFolder = new File(event.getModConfigurationDirectory(), NAME);
 		if(!configFolder.exists()){
 			File oldConfigFolder = new File(event.getModConfigurationDirectory(), MODID);
