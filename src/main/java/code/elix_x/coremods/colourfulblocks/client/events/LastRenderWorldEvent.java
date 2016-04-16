@@ -22,7 +22,7 @@ public class LastRenderWorldEvent {
 		if(player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof IColoringTool){
 			ItemStack itemstack = player.getCurrentEquippedItem();
 			RGBA color = ((IColoringTool) itemstack.getItem()).getCurrentColor(itemstack);
-			for(BlockPos block : ((IColoringTool) itemstack.getItem()).getBlocksAboutToColor(player, itemstack)){
+			for(BlockPos block : ((IColoringTool) itemstack.getItem()).getBlocksAboutToBeColored(player, itemstack)){
 				if(block.getBlock(player.worldObj) != Blocks.air) renderTint(block, color);
 			}
 		}

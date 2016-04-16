@@ -22,8 +22,6 @@ public interface IColoringTool {
 
 	public boolean hasConsumeDyes(EntityPlayer player);
 
-	public boolean isAboutToColor(EntityPlayer player, ItemStack itemstack, BlockPos pos);
-
-	public List<BlockPos> getBlocksAboutToColor(EntityPlayer player, ItemStack itemstack);
+	public List<BlockPos> getBlocksAboutToBeColored(EntityPlayer player, ItemStack itemstack);
 
 }

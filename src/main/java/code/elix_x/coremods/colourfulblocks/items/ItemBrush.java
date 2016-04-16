@@ -15,7 +15,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 
 public class ItemBrush extends ColoringTool {
@@ -29,13 +28,7 @@ public class ItemBrush extends ColoringTool {
 	 */
 
 	@Override
-	public boolean isAboutToColor(EntityPlayer player, ItemStack itemstack, BlockPos pos){
-		MovingObjectPosition mpos = player.rayTrace(5.0, 0);
-		return mpos.typeOfHit == MovingObjectType.BLOCK && mpos.blockX == pos.x && mpos.blockY == pos.y && mpos.blockZ == pos.z;
-	}
-
-	@Override
-	public List<BlockPos> getBlocksAboutToColor(EntityPlayer player, ItemStack itemstack){
+	public List<BlockPos> getBlocksAboutToBeColored(EntityPlayer player, ItemStack itemstack){
 		MovingObjectPosition mpos = player.rayTrace(5.0, 0);
 		return Lists.newArrayList(new BlockPos(mpos.blockX, mpos.blockY, mpos.blockZ));
 	}
