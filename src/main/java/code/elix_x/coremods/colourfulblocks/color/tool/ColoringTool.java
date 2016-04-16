@@ -27,7 +27,7 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 
 	public final String NAME;
 
-	public ColoringTool(ColoringToolMaterial material, double defaultBuffer, String name) {
+	public ColoringTool(ColoringToolMaterial material, double defaultBuffer, String name){
 		this.material = material;
 		this.DEFAULTBUFFER = defaultBuffer;
 		this.NAME = name;
@@ -43,33 +43,33 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	 */
 
 	@Override
-	public ColoringToolMaterial getMaterial() {
+	public ColoringToolMaterial getMaterial(){
 		return material;
 	}
 
 	@Override
-	public String getRegistryPrefix() {
+	public String getRegistryPrefix(){
 		return NAME;
 	}
 
 	@Override
-	public boolean selectColorOnLeftClickBlock() {
+	public boolean selectColorOnLeftClickBlock(){
 		return true;
 	}
 
 	@Override
-	public RGBA getCurrentColor(ItemStack itemstack) {
+	public RGBA getCurrentColor(ItemStack itemstack){
 		return getCurrentRGBA(itemstack);
 	}
 
 	@Override
-	public void setCurrentColor(ItemStack itemstack, RGBA rgba) {
+	public void setCurrentColor(ItemStack itemstack, RGBA rgba){
 		defaultBuffer(itemstack);
 		setCurrentRGBA(itemstack, rgba);
 	}
 
 	@Override
-	public boolean hasConsumeDyes(EntityPlayer player) {
+	public boolean hasConsumeDyes(EntityPlayer player){
 		if(!player.worldObj.isRemote){
 			if(player.capabilities.isCreativeMode){
 				return true;
@@ -241,7 +241,7 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	 */
 
 	@Override
-	public boolean isFull3D() {
+	public boolean isFull3D(){
 		return true;
 	}
 
@@ -249,28 +249,28 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	private IIcon fluidIcon;
 
 	@Override
-	public void registerIcons(IIconRegister reg) {
+	public void registerIcons(IIconRegister reg){
 		materialIcon = registerMaterialIcon(reg);
 		fluidIcon = registerPaintIcon(reg);
 	}
 
 	@Override
-	public IIcon getIcon(ItemStack stack, int pass) {
+	public IIcon getIcon(ItemStack stack, int pass){
 		return pass == 0 ? materialIcon : fluidIcon;
 	}
 
 	@Override
-	public boolean requiresMultipleRenderPasses() {
+	public boolean requiresMultipleRenderPasses(){
 		return true;
 	}
 
 	@Override
-	public int getRenderPasses(int metadata) {
+	public int getRenderPasses(int metadata){
 		return 2;
 	}
 
 	@Override
-	public int getColorFromItemStack(ItemStack itemstack, int pass) {
+	public int getColorFromItemStack(ItemStack itemstack, int pass){
 		if(pass == 0){
 			return material.getColor();
 		} else if(pass == 1){
@@ -284,12 +284,12 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	 */
 
 	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
+	public String getItemStackDisplayName(ItemStack itemstack){
 		return StatCollector.translateToLocal(ColoringMaterialsManager.COLORINGTOOLNAMEORDERLANG).replace("%material", StatCollector.translateToLocal(ColoringMaterialsManager.COLORINGTOOLMATERIALLANG + "." + material.name)).replace("%tool", StatCollector.translateToLocal(ColoringMaterialsManager.COLORINGTOOLLANG + "." + NAME));
 	}
 
 	@Override
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean shift) {
+	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean shift){
 		if(GuiScreen.isShiftKeyDown()){
 			list.add(StatCollector.translateToLocal("coloringtool.desc.color.red") + ": " + getCurrentRGBA(itemstack).getRF() * 100f + "% (" + getCurrentRGBA(itemstack).getRI() + "/255)");
 			list.add(StatCollector.translateToLocal("coloringtool.desc.color.green") + ": " + getCurrentRGBA(itemstack).getGF() * 100f + "% (" + getCurrentRGBA(itemstack).getGI() + "/255)");

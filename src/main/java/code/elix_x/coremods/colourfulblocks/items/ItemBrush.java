@@ -10,7 +10,6 @@ import code.elix_x.coremods.colourfulblocks.color.material.ColoringToolMaterial;
 import code.elix_x.coremods.colourfulblocks.color.tool.ColoringTool;
 import code.elix_x.coremods.colourfulblocks.color.tool.ColoringToolsManager;
 import code.elix_x.excore.utils.pos.BlockPos;
-import code.elix_x.excore.utils.pos.DimBlockPos;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -21,7 +20,7 @@ import net.minecraft.world.World;
 
 public class ItemBrush extends ColoringTool {
 
-	public ItemBrush(ColoringToolMaterial material) {
+	public ItemBrush(ColoringToolMaterial material){
 		super(material, 7.5, "brush");
 	}
 
@@ -30,24 +29,24 @@ public class ItemBrush extends ColoringTool {
 	 */
 
 	@Override
-	public boolean isAboutToColor(EntityPlayer player, ItemStack itemstack, DimBlockPos pos) {
+	public boolean isAboutToColor(EntityPlayer player, ItemStack itemstack, BlockPos pos){
 		MovingObjectPosition mpos = player.rayTrace(5.0, 0);
-		return player.worldObj.provider.dimensionId == pos.dimId && mpos.typeOfHit == MovingObjectType.BLOCK && mpos.blockX == pos.x && mpos.blockY == pos.y && mpos.blockZ == pos.z;
+		return mpos.typeOfHit == MovingObjectType.BLOCK && mpos.blockX == pos.x && mpos.blockY == pos.y && mpos.blockZ == pos.z;
 	}
 
 	@Override
-	public List<DimBlockPos> getBlocksAboutToColor(EntityPlayer player, ItemStack itemstack) {
+	public List<BlockPos> getBlocksAboutToColor(EntityPlayer player, ItemStack itemstack){
 		MovingObjectPosition mpos = player.rayTrace(5.0, 0);
-		return Lists.newArrayList(new DimBlockPos(mpos.blockX, mpos.blockY, mpos.blockZ, player.worldObj.provider.dimensionId));
+		return Lists.newArrayList(new BlockPos(mpos.blockX, mpos.blockY, mpos.blockZ));
 	}
 
 	@Override
-	protected IIcon registerMaterialIcon(IIconRegister reg) {
+	protected IIcon registerMaterialIcon(IIconRegister reg){
 		return reg.registerIcon(ColourfulBlocksBase.MODID + ":brushhandle");
 	}
 
 	@Override
-	protected IIcon registerPaintIcon(IIconRegister reg) {
+	protected IIcon registerPaintIcon(IIconRegister reg){
 		return reg.registerIcon(ColourfulBlocksBase.MODID + ":brushtop");
 	}
 
@@ -56,13 +55,13 @@ public class ItemBrush extends ColoringTool {
 	 */
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player) {
+	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player){
 		ColourfulBlocksBase.proxy.displayGuiSelectColor(itemstack);
 		return itemstack;
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float fx, float fy, float fz) {
+	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float fx, float fy, float fz){
 		ColoredBlocksManager.get(world).addRGBA(new BlockPos(x, y, z), getCurrentRGBA(itemstack));
 		itemstack.damageItem(1, player);
 		if(getBuffer(itemstack) == 0){

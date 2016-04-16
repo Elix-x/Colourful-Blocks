@@ -19,7 +19,7 @@ public class ColorChangeMessage implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBytes(ByteBuf buf){
 		rgba = RGBA.createFromNBT(ByteBufUtils.readTag(buf));
 	}
 
