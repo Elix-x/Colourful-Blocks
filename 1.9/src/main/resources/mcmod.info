@@ -1,0 +1,16 @@
+[
+{
+  "modid": "colourfullblocks",
+  "name": "Colourfull Blocks",
+  "description": "",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Elix_x"],
+  "credits": "Elix_x for making this possible!",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
