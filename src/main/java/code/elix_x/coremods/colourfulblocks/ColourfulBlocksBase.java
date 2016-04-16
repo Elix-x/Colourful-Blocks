@@ -20,7 +20,7 @@ import code.elix_x.coremods.colourfulblocks.items.ItemBrush;
 import code.elix_x.coremods.colourfulblocks.net.ColorChangeMessage;
 import code.elix_x.coremods.colourfulblocks.net.ColorfulBlocksSyncMessage;
 import code.elix_x.coremods.colourfulblocks.net.ColourfulBlocksGuiHandler;
-import code.elix_x.coremods.colourfulblocks.proxy.CommonProxy;
+import code.elix_x.coremods.colourfulblocks.proxy.IColorfulBlocksProxy;
 import code.elix_x.excore.EXCore;
 import code.elix_x.excore.utils.packets.SmartNetworkWrapper;
 import cpw.mods.fml.common.Mod;
@@ -46,8 +46,8 @@ public class ColourfulBlocksBase {
 	@Mod.Instance(MODID)
 	public static ColourfulBlocksBase instance;
 
-	@SidedProxy(clientSide = "code.elix_x.coremods.colourfulblocks.proxy.ClientProxy", serverSide = "code.elix_x.coremods.colourfulblocks.proxy.CommonProxy")
-	public static CommonProxy proxy;
+	@SidedProxy(clientSide = "code.elix_x.coremods.colourfulblocks.proxy.ClientProxy", serverSide = "code.elix_x.coremods.colourfulblocks.proxy.ServerProxy")
+	public static IColorfulBlocksProxy proxy;
 
 	public static final Logger logger = LogManager.getLogger(NAME);
 

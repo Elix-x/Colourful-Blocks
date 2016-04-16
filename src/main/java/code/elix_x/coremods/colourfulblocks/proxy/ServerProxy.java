@@ -4,7 +4,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-public class ClientProxy implements IColorfulBlocksProxy {
+public class ServerProxy implements IColorfulBlocksProxy {
 
 	@Override
 	public void preInit(FMLPreInitializationEvent event){ 
