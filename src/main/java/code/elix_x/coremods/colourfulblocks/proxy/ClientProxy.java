@@ -11,17 +11,17 @@ import net.minecraft.item.ItemStack;
 public class ClientProxy implements IColorfulBlocksProxy {
 
 	@Override
-	public void preInit(FMLPreInitializationEvent event){ 
+	public void preInit(FMLPreInitializationEvent event){
 
 	}
 
 	@Override
-	public void init(FMLInitializationEvent event){ 
+	public void init(FMLInitializationEvent event){
 
 	}
 
 	@Override
-	public void postInit(FMLPostInitializationEvent event){ 
+	public void postInit(FMLPostInitializationEvent event){
 
 	}
 
