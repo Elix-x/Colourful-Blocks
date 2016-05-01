@@ -11,14 +11,14 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.SortingIndex;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
 @Name(ColourfulBlocksBase.MODID)
-@TransformerExclusions("code.elix_x.coremods.colourfulblocks.core")
+@TransformerExclusions("code.elix_x.coremods.colorfulblocks.core")
 @MCVersion(EXCore.MCVERSION)
 @SortingIndex(1001)
-public final class ColourfulBlocksCore implements IFMLLoadingPlugin {
+public final class ColorfulBlocksCore implements IFMLLoadingPlugin {
 
-	//-Dfml.coreMods.load=code.elix_x.coremods.colourfulblocks.core.ColourfulBlocksCore
+	//-Dfml.coreMods.load=code.elix_x.coremods.colorfulblocks.core.ColorfulBlocksCore
 
-	public static final String Transformer = "code.elix_x.coremods.colourfulblocks.core.ColourfulBlocksTransformer";
+	public static final String Transformer = "code.elix_x.coremods.colorfulblocks.core.ColorfulBlocksTransformer";
 
 	public static final String[] transformers = new String[]{Transformer};
 

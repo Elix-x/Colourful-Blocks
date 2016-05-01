@@ -1,7 +1,6 @@
 package code.elix_x.coremods.colorfulblocks.color.material;
 
 import java.awt.Color;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -40,7 +39,6 @@ import code.elix_x.excore.utils.recipes.RecipeStringTranslator;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.resources.LanguageManager;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
@@ -201,7 +199,7 @@ public class ColoringMaterialsManager {
 		RGBA color = new RGBA(0, 0, 0, 0);
 		if(itemstack != null && itemstack.getItem() != null){
 			ResourceLocation texture = null;
-			if(Block.getBlockFromItem(itemstack.getItem()) != Blocks.air){
+			if(Block.getBlockFromItem(itemstack.getItem()) != Blocks.AIR){
 				Block block = Block.getBlockFromItem(itemstack.getItem());
 				String textureName = ObfuscationReflectionHelper.getPrivateValue(Block.class, block, "textureName", "field_149768_d");
 				if(textureName != null){
@@ -325,7 +323,7 @@ public class ColoringMaterialsManager {
 		map.put(RECIPEENTRYMATERIAL, RECIPEENTRYMATERIAL);
 		GsonRecipesConversion conversion = new GsonRecipesConversion(
 				new GsonRecipeHandlerConversion(RECIPENAMEVANILLA, 
-						new GsonRecipeConversion(RECIPETYPEBRUSH, RecipeStringTranslator.toString(map, "  #", " % ", "$  ", '#', Blocks.wool, '%', RECIPEENTRYMATERIAL, '$', "stickWood"))
+						new GsonRecipeConversion(RECIPETYPEBRUSH, RecipeStringTranslator.toString(map, "  #", " % ", "$  ", '#', Blocks.WOOL, '%', RECIPEENTRYMATERIAL, '$', "stickWood"))
 						)
 				);
 		File materials = new File(vanillaDir, "recipes.json");
@@ -545,12 +543,12 @@ public class ColoringMaterialsManager {
 			File langDir = new File(file, "lang");
 			langDir.mkdir();
 			for(File lang : langDir.listFiles(new FileFilter(){
-				
+
 				@Override
 				public boolean accept(File file){
 					return !file.isDirectory() && file.getName().endsWith(".lang");
 				}
-				
+
 			})){
 				try {
 					/*String language = lang.getName().substring(0, lang.getName().length() - 5);

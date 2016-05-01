@@ -12,8 +12,6 @@ public interface IColoringTool {
 
 	public ColoringToolMaterial getMaterial();
 
-	public String getRegistryPrefix();
-
 	public boolean selectColorOnLeftClickBlock();
 
 	public RGBA getCurrentColor(ItemStack itemstack);

@@ -33,7 +33,7 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 		setMaxDamage(material.durability);
 		setMaxStackSize(1);
 
-		setCreativeTab(CreativeTabs.tabTools);
+		setCreativeTab(CreativeTabs.TOOLS);
 	}
 
 	/*
@@ -43,11 +43,6 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	@Override
 	public ColoringToolMaterial getMaterial(){
 		return material;
-	}
-
-	@Override
-	public String getRegistryPrefix(){
-		return NAME;
 	}
 
 	@Override
@@ -99,7 +94,7 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 							bs = i;
 						}
 					}
-					if(itemstack.getItem() == Items.water_bucket){
+					if(itemstack.getItem() == Items.WATER_BUCKET){
 						water = true;
 					}
 				}
@@ -134,8 +129,8 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 				}
 
 				if(ColourfulBlocksBase.consumeWaterOnPaint){
-					player.inventory.decrStackSize(player.inventory.getSlotFor(new ItemStack(Items.water_bucket)), 1);
-					player.inventory.addItemStackToInventory(new ItemStack(Items.bucket));
+					player.inventory.decrStackSize(player.inventory.getSlotFor(new ItemStack(Items.WATER_BUCKET)), 1);
+					player.inventory.addItemStackToInventory(new ItemStack(Items.BUCKET));
 				}
 				((EntityPlayerMP) player).sendContainerToPlayer(player.openContainer);
 			}
@@ -242,40 +237,6 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	public boolean isFull3D(){
 		return true;
 	}
-
-	/*private IIcon materialIcon;
-	private IIcon fluidIcon;
-
-	@Override
-	public void registerIcons(IIconRegister reg){
-		materialIcon = registerMaterialIcon(reg);
-		fluidIcon = registerPaintIcon(reg);
-	}
-
-	@Override
-	public IIcon getIcon(ItemStack stack, int pass){
-		return pass == 0 ? materialIcon : fluidIcon;
-	}
-
-	@Override
-	public boolean requiresMultipleRenderPasses(){
-		return true;
-	}
-
-	@Override
-	public int getRenderPasses(int metadata){
-		return 2;
-	}
-
-	@Override
-	public int getColorFromItemStack(ItemStack itemstack, int pass){
-		if(pass == 0){
-			return material.getColor();
-		} else if(pass == 1){
-			return getCurrentRGBA(itemstack).argb();
-		}
-		return 16777215;
-	}*/
 
 	/*
 	 * Name

@@ -43,7 +43,7 @@ public class ColoringToolsManager {
 				for(Entry<ColoringToolMaterial, Pair<String, Map<String, Object>>> e : ColoringMaterialsManager.getAllMaterialsAndRecipes().entrySet()){
 					logger.debug("Registering underlying tool for material: " + e.getKey().name);
 					Item item = provider.provide(e.getKey());
-					GameRegistry.register(item.setRegistryName(ColourfulBlocksBase.MODID + ":" + ((IColoringTool) item).getRegistryPrefix() + "_" + e.getKey().name));
+					GameRegistry.register(item);
 					if(!e.getValue().getKey().equals(ColoringMaterialsManager.RECIPENAMENULL)){
 						if(!(e.getValue().getKey().equals(ColoringMaterialsManager.RECIPENAMEVANILLA) && e.getValue().getValue().get(ColoringMaterialsManager.RECIPEENTRYMATERIAL) == null)){
 							GameRegistry.addRecipe(RecipeStringTranslator.fromString(new ItemStack(item), e.getValue().getValue(), ColoringMaterialsManager.getRecipe(e.getValue().getKey(), provider.getRecipeType())));
@@ -79,7 +79,7 @@ public class ColoringToolsManager {
 	}
 
 	public static void notifiyNoDyes(EntityPlayer player){
-		player.addChatMessage(new TextComponentString(I18n.translateToLocal("message.nodies")).setChatStyle(new Style().setColor(TextFormatting.RED)));
+		player.addChatMessage(new TextComponentString(I18n.translateToLocal("message.nodies")).setStyle(new Style().setColor(TextFormatting.RED)));
 	}
 
 }

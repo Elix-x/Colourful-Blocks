@@ -135,7 +135,7 @@ public class ColourfulBlocksBase {
 
 			@Override
 			public ItemBrush provide(ColoringToolMaterial material){
-				return new ItemBrush(material);
+				return (ItemBrush) new ItemBrush(material).setRegistryName(MODID, "brush_" + material.name);
 			}
 
 		});

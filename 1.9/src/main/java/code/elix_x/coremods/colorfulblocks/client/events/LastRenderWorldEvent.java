@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -24,8 +25,10 @@ public class LastRenderWorldEvent {
 		if(player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) != null && player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() instanceof IColoringTool){
 			ItemStack itemstack = player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
 			RGBA color = ((IColoringTool) itemstack.getItem()).getCurrentColor(itemstack);
-			for(BlockPos block : ((IColoringTool) itemstack.getItem()).getBlocksAboutToBeColored(player, itemstack)){
-				if(block.getBlock(player.worldObj) != Blocks.air) renderTint(block, color);
+			if(color != null){
+				for(BlockPos block : ((IColoringTool) itemstack.getItem()).getBlocksAboutToBeColored(player, itemstack)){
+					if(block.getBlock(player.worldObj) != Blocks.AIR) renderTint(block, color);
+				}
 			}
 		}
 	}
@@ -35,47 +38,47 @@ public class LastRenderWorldEvent {
 		GL11.glTranslated(block.x - TileEntityRendererDispatcher.staticPlayerX, block.y - TileEntityRendererDispatcher.staticPlayerY, block.z -TileEntityRendererDispatcher.staticPlayerZ);
 		GL11.glEnable(GL11.GL_BLEND);
 
-		VertexBuffer tess = Tessellator.getInstance().getBuffer();
-		//		tess.begin(GL11.GL_QUADS, new VertexFormat().addElement(new ));
-		//		tess.setColorRGBA(color.r, color.g, color.b, 128);
+		Tessellator tess = Tessellator.getInstance();
+		VertexBuffer vertexBuffer = tess.getBuffer();
+		vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 
 		//bottom
-		tess.color(color.r, color.g, color.b, 128).putPosition(-0.001, -0.001, -0.001); tess.endVertex();
-		tess.color(color.r, color.g, color.b, 128).putPosition(1.001, -0.001, -0.001); tess.endVertex();
-		tess.color(color.r, color.g, color.b, 128).putPosition(1.001, -0.001, 1.001); tess.endVertex();
-		tess.color(color.r, color.g, color.b, 128).putPosition(-0.001, -0.001, 1.001); tess.endVertex();
+		vertexBuffer.pos(-0.001, -0.001, -0.001).color(color.r, color.g, color.b, 128).endVertex();
+		vertexBuffer.pos(1.001, -0.001, -0.001).color(color.r, color.g, color.b, 128).endVertex();
+		vertexBuffer.pos(1.001, -0.001, 1.001).color(color.r, color.g, color.b, 128).endVertex();
+		vertexBuffer.pos(-0.001, -0.001, 1.001).color(color.r, color.g, color.b, 128).endVertex();
 
 		//front
-		tess.color(color.r, color.g, color.b, 128).putPosition(-0.001, -0.001, -0.001); tess.endVertex();
-		tess.color(color.r, color.g, color.b, 128).putPosition(-0.001, 1.001, -0.001); tess.endVertex();
-		tess.color(color.r, color.g, color.b, 128).putPosition(1.001, 1.001, -0.001); tess.endVertex();
-		tess.color(color.r, color.g, color.b, 128).putPosition(1.001, -0.001, -0.001); tess.endVertex();
+		vertexBuffer.pos(-0.001, -0.001, -0.001).color(color.r, color.g, color.b, 128).endVertex();
+		vertexBuffer.pos(-0.001, 1.001, -0.001).color(color.r, color.g, color.b, 128).endVertex();
+		vertexBuffer.pos(1.001, 1.001, -0.001).color(color.r, color.g, color.b, 128).endVertex();
+		vertexBuffer.pos(1.001, -0.001, -0.001).color(color.r, color.g, color.b, 128).endVertex();
 
 		//left
-		tess.color(color.r, color.g, color.b, 128).putPosition(-0.001, -0.001, -0.001); tess.endVertex();
-		tess.color(color.r, color.g, color.b, 128).putPosition(-0.001, -0.001, 1.001); tess.endVertex();
-		tess.color(color.r, color.g, color.b, 128).putPosition(-0.001, 1.001, 1.001); tess.endVertex();
-		tess.color(color.r, color.g, color.b, 128).putPosition(-0.001, 1.001, -0.001); tess.endVertex();
+		vertexBuffer.pos(-0.001, -0.001, -0.001).color(color.r, color.g, color.b, 128).endVertex();
+		vertexBuffer.pos(-0.001, -0.001, 1.001).color(color.r, color.g, color.b, 128).endVertex();
+		vertexBuffer.pos(-0.001, 1.001, 1.001).color(color.r, color.g, color.b, 128).endVertex();
+		vertexBuffer.pos(-0.001, 1.001, -0.001).color(color.r, color.g, color.b, 128).endVertex();
 
 		//back
-		tess.color(color.r, color.g, color.b, 128).putPosition(-0.001, -0.001, 1.001); tess.endVertex();
-		tess.color(color.r, color.g, color.b, 128).putPosition(1.001, -0.001, 1.001); tess.endVertex();
-		tess.color(color.r, color.g, color.b, 128).putPosition(1.001, 1.001, 1.001); tess.endVertex();
-		tess.color(color.r, color.g, color.b, 128).putPosition(-0.001, 1.001, 1.001); tess.endVertex();
+		vertexBuffer.pos(-0.001, -0.001, 1.001).color(color.r, color.g, color.b, 128).endVertex();
+		vertexBuffer.pos(1.001, -0.001, 1.001).color(color.r, color.g, color.b, 128).endVertex();
+		vertexBuffer.pos(1.001, 1.001, 1.001).color(color.r, color.g, color.b, 128).endVertex();
+		vertexBuffer.pos(-0.001, 1.001, 1.001).color(color.r, color.g, color.b, 128).endVertex();
 
 		//right
-		tess.color(color.r, color.g, color.b, 128).putPosition(1.001, -0.001, -0.001); tess.endVertex();
-		tess.color(color.r, color.g, color.b, 128).putPosition(1.001, 1.001, -0.001); tess.endVertex();
-		tess.color(color.r, color.g, color.b, 128).putPosition(1.001, 1.001, 1.001); tess.endVertex();
-		tess.color(color.r, color.g, color.b, 128).putPosition(1.001, -0.001, 1.001); tess.endVertex();
+		vertexBuffer.pos(1.001, -0.001, -0.001).color(color.r, color.g, color.b, 128).endVertex();
+		vertexBuffer.pos(1.001, 1.001, -0.001).color(color.r, color.g, color.b, 128).endVertex();
+		vertexBuffer.pos(1.001, 1.001, 1.001).color(color.r, color.g, color.b, 128).endVertex();
+		vertexBuffer.pos(1.001, -0.001, 1.001).color(color.r, color.g, color.b, 128).endVertex();
 
 		//top
-		tess.color(color.r, color.g, color.b, 128).putPosition(-0.001, 1.001, -0.001); tess.endVertex();
-		tess.color(color.r, color.g, color.b, 128).putPosition(-0.001, 1.001, 1.001); tess.endVertex();
-		tess.color(color.r, color.g, color.b, 128).putPosition(1.001, 1.001, 1.001); tess.endVertex();
-		tess.color(color.r, color.g, color.b, 128).putPosition(1.001, 1.001, -0.001); tess.endVertex();
+		vertexBuffer.pos(-0.001, 1.001, -0.001).color(color.r, color.g, color.b, 128).endVertex();
+		vertexBuffer.pos(-0.001, 1.001, 1.001).color(color.r, color.g, color.b, 128).endVertex();
+		vertexBuffer.pos(1.001, 1.001, 1.001).color(color.r, color.g, color.b, 128).endVertex();
+		vertexBuffer.pos(1.001, 1.001, -0.001).color(color.r, color.g, color.b, 128).endVertex();
 
-		tess.finishDrawing();
+		tess.draw();
 
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glPopMatrix();

@@ -30,12 +30,12 @@ public class MainipulatePaintEvent {
 		}
 
 		if(event instanceof RightClickBlock){
-			if(event.getItemStack() != null && event.getItemStack().getItem() == Items.potionitem && event.getItemStack().getItemDamage() == 0){
+			if(event.getItemStack() != null && event.getItemStack().getItem() == Items.POTIONITEM && event.getItemStack().getItemDamage() == 0){
 				if(ColoredBlocksManager.get(event.getWorld()).hasRGBA(new BlockPos(event.getPos()))){
 					ColoredBlocksManager.get(event.getWorld()).removeRGBA(new BlockPos(event.getPos()));
 
 					if(ColourfulBlocksBase.consumeWaterOnErase && !event.getEntityPlayer().capabilities.isCreativeMode){
-						event.getEntityPlayer().setItemStackToSlot(event.getHand() == EnumHand.MAIN_HAND ? EntityEquipmentSlot.MAINHAND : EntityEquipmentSlot.OFFHAND, new ItemStack(Items.glass_bottle));
+						event.getEntityPlayer().setItemStackToSlot(event.getHand() == EnumHand.MAIN_HAND ? EntityEquipmentSlot.MAINHAND : EntityEquipmentSlot.OFFHAND, new ItemStack(Items.GLASS_BOTTLE));
 					}
 
 					event.setCanceled(true);

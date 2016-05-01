@@ -18,7 +18,6 @@ import code.elix_x.excore.utils.color.RGBA;
 import code.elix_x.excore.utils.nbt.mbt.MBT;
 import code.elix_x.excore.utils.pos.BlockPos;
 import code.elix_x.excore.utils.pos.DimBlockPos;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,7 +26,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -61,8 +59,8 @@ public class ColoredBlocksManager extends WorldSavedData {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static int getBlockColor(IBlockAccess world, Block block, int x, int y, int z, int original){
-		RGBA rgba = get(Minecraft.getMinecraft().theWorld).getBlockColor(x, y, z);
+	public static int getBlockColor(IBlockAccess world, BlockPos pos, int original){
+		RGBA rgba = get(world instanceof World ? (World) world : Minecraft.getMinecraft().theWorld).getRGBA(pos);
 		if(rgba == null){
 			return original;
 		} else if(original == DEFAULTCOLOR){
@@ -78,7 +76,7 @@ public class ColoredBlocksManager extends WorldSavedData {
 
 	@SideOnly(Side.CLIENT)
 	public static void recolorTileEntity(TileEntity tileentity){
-		get(tileentity.getWorld()).recolorBlock(tileentity.getPos().getX(), tileentity.getPos().getY(), tileentity.getPos().getZ());
+		if(tileentity.getWorld() != null) get(tileentity.getWorld()).recolorBlock(tileentity.getPos().getX(), tileentity.getPos().getY(), tileentity.getPos().getZ());
 	}
 
 	public static void enqueueOldColoredBlock(DimBlockPos pos, RGBA rgba){
@@ -92,19 +90,6 @@ public class ColoredBlocksManager extends WorldSavedData {
 
 	public ColoredBlocksManager(String name){
 		super(name);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public RGBA getBlockColor(int x, int y, int z){
-		RGBA rgba = getRGBA(new BlockPos(x, y, z));
-		try{
-			if(Loader.isModLoaded("powerofbreathing") && (Boolean) Class.forName("code.elix_x.mods.powerofbreathing.events.NyanEvents").getMethod("isGoing").invoke(null)){
-				rgba = (RGBA) Class.forName("code.elix_x.mods.powerofbreathing.events.NyanEvents").getMethod("colorBlock").invoke(null);
-			}
-		} catch(Exception e){
-
-		}
-		return rgba;
 	}
 
 	@SideOnly(Side.CLIENT)
