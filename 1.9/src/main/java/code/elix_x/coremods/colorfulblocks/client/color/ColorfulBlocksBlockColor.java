@@ -16,7 +16,7 @@ public class ColorfulBlocksBlockColor implements IBlockColor {
 
 	@Override
 	public int colorMultiplier(IBlockState state, IBlockAccess world, BlockPos pos, int tintIndex){
-		return world != null && pos != null ? ColoredBlocksManager.getBlockColor(world, new code.elix_x.excore.utils.pos.BlockPos(pos), parent != null ? parent.colorMultiplier(state, world, pos, tintIndex) : -1) : parent.colorMultiplier(state, world, pos, tintIndex);
+		return world != null && pos != null ? ColoredBlocksManager.getBlockColor(world, state, new code.elix_x.excore.utils.pos.BlockPos(pos), parent != null ? parent.colorMultiplier(state, world, pos, tintIndex) : -1) : parent.colorMultiplier(state, world, pos, tintIndex);
 	}
 
 }

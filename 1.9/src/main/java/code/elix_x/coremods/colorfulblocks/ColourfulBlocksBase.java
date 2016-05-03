@@ -61,7 +61,7 @@ public class ColourfulBlocksBase {
 	public static boolean consumeWaterOnPaint;
 
 	@EventHandler
-	public void preInit(FMLPreInitializationEvent event){ 
+	public void preInit(FMLPreInitializationEvent event){
 		net = new SmartNetworkWrapper(NAME);
 		net.registerMessage3(new Function<ColorfulBlocksSyncMessage, Runnable>(){
 

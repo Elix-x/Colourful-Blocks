@@ -18,6 +18,7 @@ import code.elix_x.excore.utils.color.RGBA;
 import code.elix_x.excore.utils.nbt.mbt.MBT;
 import code.elix_x.excore.utils.pos.BlockPos;
 import code.elix_x.excore.utils.pos.DimBlockPos;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,8 +37,6 @@ public class ColoredBlocksManager extends WorldSavedData {
 	private static final MBT mbt = new MBT();
 
 	public static final String NAME = "Colored Blocks";
-
-	public static final int DEFAULTCOLOR = 16777215;
 
 	private static Multimap<Integer, Pair<BlockPos, RGBA>> coloredBlocksQueue;
 
@@ -59,18 +58,22 @@ public class ColoredBlocksManager extends WorldSavedData {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static int getBlockColor(IBlockAccess world, BlockPos pos, int original){
-		RGBA rgba = get(world instanceof World ? (World) world : Minecraft.getMinecraft().theWorld).getRGBA(pos);
-		if(rgba == null){
-			return original;
-		} else if(original == DEFAULTCOLOR){
-			return rgba.argb();
-		} else {
-			if(ColourfulBlocksBase.multipyOriginalColor){
-				return rgba.multiply(new RGBA(original)).argb();
-			} else {
+	public static int getBlockColor(IBlockAccess world, IBlockState state, BlockPos pos, int original){
+		if(world != null && pos != null){
+			RGBA rgba = get(world instanceof World ? (World) world : Minecraft.getMinecraft().theWorld).getRGBA(pos);
+			if(rgba == null){
+				return original;
+			} else if(original == -1){
 				return rgba.argb();
+			} else {
+				if(ColourfulBlocksBase.multipyOriginalColor){
+					return rgba.multiply(new RGBA(original)).argb();
+				} else {
+					return rgba.argb();
+				}
 			}
+		} else {
+			return original;
 		}
 	}
 

@@ -31,7 +31,7 @@ public class ClientProxy implements IColorfulBlocksProxy {
 
 	@Override
 	public void postInit(FMLPostInitializationEvent event){
-		Map<net.minecraftforge.fml.common.registry.RegistryDelegate<Block>, IBlockColor> blockColorMap = new AField<Map<net.minecraftforge.fml.common.registry.RegistryDelegate<Block>, IBlockColor>>(BlockColors.class, "blockColorMap").setAccessible(true).get(Minecraft.getMinecraft().getBlockColors());
+		Map<net.minecraftforge.fml.common.registry.RegistryDelegate<Block>, IBlockColor> blockColorMap = new AField<BlockColors, Map<net.minecraftforge.fml.common.registry.RegistryDelegate<Block>, IBlockColor>>(BlockColors.class, "blockColorMap").setAccessible(true).get(Minecraft.getMinecraft().getBlockColors());
 		for(Block block : Block.REGISTRY){
 			blockColorMap.put(block.delegate, new ColorfulBlocksBlockColor(blockColorMap.get(block.delegate)));
 		}
