@@ -37,7 +37,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod(modid = ColourfulBlocksBase.MODID, name = ColourfulBlocksBase.NAME, version = ColourfulBlocksBase.VERSION, dependencies = "required-after:" + EXCore.DEPENDENCY, acceptedMinecraftVersions = EXCore.MCVERSION)
 public class ColourfulBlocksBase {
 
-	public static final String MODID = "colorfullblocks";
+	public static final String MODID = "colorfulblocks";
 	public static final String NAME = "Colorful Blocks";
 	public static final String VERSION = "1.2.2";
 
