@@ -12,14 +12,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -27,7 +25,6 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import code.elix_x.coremods.colorfulblocks.ColourfulBlocksBase;
-import code.elix_x.coremods.colorfulblocks.color.material.ColoringMaterialsManager.GsonConversionOldBrushes.GsonConversionOldBrush;
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringMaterialsManager.GsonMaterialsConversion.GsonMaterialConversion;
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringMaterialsManager.GsonMaterialsConversion.GsonMaterialConversion.GsonConversionRecipeEntry;
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringMaterialsManager.GsonRecipesConversion.GsonRecipeHandlerConversion;
@@ -79,7 +76,6 @@ public class ColoringMaterialsManager {
 			initRecipes();
 			initLocalisations();
 		}
-		updateOldStuff();
 		logger.info("Fixing extensions");
 		if(FMLCommonHandler.instance().getSide() == Side.CLIENT && ColourfulBlocksBase.mainConfig.getBoolean("fixColors", "json", true, "Fix color for items with color \"0\" or \"0:0:0\" or \"0:0:0:0\", but with valid crafting item.")){
 			fixColors();
@@ -88,74 +84,6 @@ public class ColoringMaterialsManager {
 		loadMaterials();
 		loadRecipes();
 		loadLocalisations();
-	}
-
-	@Deprecated
-	private static void updateOldStuff(){
-		logger.info("Updating old stuff");
-		File oldFile = new File(ColourfulBlocksBase.configFolder, "brushes.json");
-		if(oldFile.exists()){
-			try {
-				JsonReader reader = new JsonReader(new FileReader(oldFile));
-				GsonConversionOldBrushes brushesOld = gson.fromJson(reader, GsonConversionOldBrushes.class);
-				GsonMaterialsConversion brushesNew = new GsonMaterialsConversion(new ArrayList<GsonMaterialConversion>());
-				for(GsonConversionOldBrush oldBrush : brushesOld.brushes){
-					brushesNew.materials.add(new GsonMaterialConversion(oldBrush.name, oldBrush.durability, oldBrush.buffer, oldBrush.color, RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, oldBrush.ingredient.replace("oredictionary:", ItemStackStringTranslator.OREDICT + ":"))));
-				}
-				reader.close();
-				File portedDir = new File(extensionsDir, "ported");
-				portedDir.mkdir();
-				File newFile = new File(portedDir, "materials.json");
-				newFile.createNewFile();
-				JsonWriter writer = new JsonWriter(new FileWriter(newFile));
-				gson.toJson(brushesNew, GsonMaterialsConversion.class, writer);
-				writer.close();
-				oldFile.delete();
-				File oldLangDir = new File(ColourfulBlocksBase.configFolder, "lang");
-				oldLangDir.mkdir();
-				File newLangDir = new File(portedDir, "lang");
-				newLangDir.mkdir();
-				for(File oldLangFile : oldLangDir.listFiles(new FileFilter(){
-
-					@Override
-					public boolean accept(File file){
-						return file.getName().endsWith(".lang");
-					}
-
-				})){
-					File newLangFile = new File(newLangDir, oldLangFile.getName());
-					newLangFile.createNewFile();
-					FileUtils.writeLines(newLangFile, Lists.transform(FileUtils.readLines(oldLangFile), new Function<String, String>(){
-
-						@Override
-						public String apply(String input){
-							return input.replace("brushmaterial", COLORINGTOOLMATERIALLANG);
-						}
-					}));
-				}
-				FileUtils.deleteDirectory(oldLangDir);
-			} catch(IOException e){
-				logger.error("Caught exception while updating old stuff: ", e);
-			}
-		}
-	}
-
-	@Deprecated
-	public static class GsonConversionOldBrushes {
-
-		private List<GsonConversionOldBrush> brushes;
-
-		@Deprecated
-		public static class GsonConversionOldBrush {
-
-			private String name;
-			private int durability;
-			private int buffer;
-			private String color;
-			private String ingredient;
-
-		}
-
 	}
 
 	/*
@@ -176,17 +104,6 @@ public class ColoringMaterialsManager {
 
 	private static ItemStack recognizeRepairItem(ToolMaterial material){
 		return material.getRepairItemStack();
-	}
-
-	@SideOnly(Side.CLIENT)
-	private static String recognizeColorToString(ToolMaterial material){
-		return recognizeColorToString(recognizeRepairItem(material));
-	}
-
-	@SideOnly(Side.CLIENT)
-	private static String recognizeColorToString(ItemStack itemstack){
-		RGBA rgba = recognizeColorToRGBA(itemstack);
-		return rgba.getRI() + ":" + rgba.getGI() + ":" + rgba.getBI();
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -271,11 +188,11 @@ public class ColoringMaterialsManager {
 		vanillaDir.mkdirs();
 
 		GsonMaterialsConversion conversion = new GsonMaterialsConversion(
-				new GsonMaterialConversion(ToolMaterial.WOOD.name(), ToolMaterial.WOOD.getMaxUses(), ToolMaterial.WOOD.getHarvestLevel(), (110 + ":" + 65 + ":" + 43), RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, "oreDict:plankWood")),
-				new GsonMaterialConversion(ToolMaterial.STONE.name(), ToolMaterial.STONE.getMaxUses(), ToolMaterial.STONE.getHarvestLevel(), (77 + ":" + 77 + ":" + 77), RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, "oreDict:cobblestone")),
-				new GsonMaterialConversion(ToolMaterial.IRON.name(), ToolMaterial.IRON.getMaxUses(), ToolMaterial.IRON.getHarvestLevel(), (153 + ":" + 153 + ":" + 153), RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, "oreDict:ingotIron")),
-				new GsonMaterialConversion(ToolMaterial.GOLD.name(), ToolMaterial.GOLD.getMaxUses(), ToolMaterial.GOLD.getHarvestLevel(), (186 + ":" + 154 + ":" + 9), RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, "oreDict:ingotGold")),
-				new GsonMaterialConversion(ToolMaterial.DIAMOND.name(), ToolMaterial.DIAMOND.getMaxUses(), ToolMaterial.DIAMOND.getHarvestLevel(), (39 + ":" + 207 + ":" + 230), RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, "oreDict:gemDiamond"))
+				new GsonMaterialConversion(ToolMaterial.WOOD.name(), ToolMaterial.WOOD.getMaxUses(), ToolMaterial.WOOD.getHarvestLevel(), new RGBA(110, 65, 43), RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, "oreDict:plankWood")),
+				new GsonMaterialConversion(ToolMaterial.STONE.name(), ToolMaterial.STONE.getMaxUses(), ToolMaterial.STONE.getHarvestLevel(), new RGBA(77, 77, 77), RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, "oreDict:cobblestone")),
+				new GsonMaterialConversion(ToolMaterial.IRON.name(), ToolMaterial.IRON.getMaxUses(), ToolMaterial.IRON.getHarvestLevel(), new RGBA(153, 153, 153), RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, "oreDict:ingotIron")),
+				new GsonMaterialConversion(ToolMaterial.GOLD.name(), ToolMaterial.GOLD.getMaxUses(), ToolMaterial.GOLD.getHarvestLevel(), new RGBA(186, 154, 9), RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, "oreDict:ingotGold")),
+				new GsonMaterialConversion(ToolMaterial.DIAMOND.name(), ToolMaterial.DIAMOND.getMaxUses(), ToolMaterial.DIAMOND.getHarvestLevel(), new RGBA(39, 207, 230), RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, "oreDict:gemDiamond"))
 				);
 
 		File materials = new File(vanillaDir, "materials.json");
@@ -294,7 +211,7 @@ public class ColoringMaterialsManager {
 		for(ToolMaterial mat : ToolMaterial.values()){
 			if(mat != ToolMaterial.WOOD && mat != ToolMaterial.STONE && mat != ToolMaterial.IRON && mat != ToolMaterial.GOLD && mat != ToolMaterial.DIAMOND){
 				logger.debug("Found modded tool material. Generating coloring tool material from it.");
-				conversion.materials.add(new GsonMaterialConversion(mat.name(), mat.getMaxUses(), mat.getHarvestLevel(), FMLCommonHandler.instance().getSide() == Side.CLIENT ? recognizeColorToString(mat) : "0:0:0", RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, ItemStackStringTranslator.toString(recognizeRepairItem(mat)))));
+				conversion.materials.add(new GsonMaterialConversion(mat.name(), mat.getMaxUses(), mat.getHarvestLevel(), FMLCommonHandler.instance().getSide() == Side.CLIENT ? recognizeColorToRGBA(mat) : new RGBA(0, 0, 0), RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, ItemStackStringTranslator.toString(recognizeRepairItem(mat)))));
 			}
 		}
 
@@ -432,7 +349,7 @@ public class ColoringMaterialsManager {
 									}
 								}
 								if(r.length > 0 && g.length > 0 && b.length > 0){
-									mat.color = AdvancedMathUtils.average(r) + ":" + AdvancedMathUtils.average(g) + ":" + AdvancedMathUtils.average(b);
+									mat.color = new RGBA(AdvancedMathUtils.average(r), AdvancedMathUtils.average(g), AdvancedMathUtils.average(b));
 								}
 							}
 						}
@@ -475,17 +392,7 @@ public class ColoringMaterialsManager {
 					JsonReader reader = new JsonReader(new FileReader(json));
 					GsonMaterialsConversion mats = gson.fromJson(reader, GsonMaterialsConversion.class);
 					for(GsonMaterialConversion mat : mats.materials){
-						ColoringToolMaterial material;
-						try{
-							material = new ColoringToolMaterial(mat.name, mat.durability, Integer.parseInt(mat.color), mat.bufferMultiplier);
-						} catch(NumberFormatException e){
-							String[] s = mat.color.split(":");
-							if(s.length == 3){
-								material = new ColoringToolMaterial(mat.name, mat.durability, new RGBA(Integer.parseInt(s[0]), Integer.parseInt(s[1]), Integer.parseInt(s[2])), mat.bufferMultiplier);
-							} else {
-								material = new ColoringToolMaterial(mat.name, mat.durability, new RGBA(Integer.parseInt(s[0]), Integer.parseInt(s[1]), Integer.parseInt(s[2]), Integer.parseInt(s[3])), mat.bufferMultiplier);
-							}
-						}
+						ColoringToolMaterial material = new ColoringToolMaterial(mat.name, mat.durability, mat.color, mat.bufferMultiplier);
 						Map<String, Object> map = new HashMap<String, Object>();
 						for(GsonConversionRecipeEntry r : mat.ingredients){
 							map.put(r.name, ItemStackStringTranslator.fromStringAdvanced(r.value));
@@ -602,7 +509,7 @@ public class ColoringMaterialsManager {
 			private String name;
 			private int durability;
 			private double bufferMultiplier;
-			private String color;
+			private RGBA color;
 			private String recipe;
 			private List<GsonConversionRecipeEntry> ingredients;
 
@@ -610,7 +517,7 @@ public class ColoringMaterialsManager {
 
 			}
 
-			public GsonMaterialConversion(String name, int durability, double bufferMultiplier, String color, String recipe, List<GsonConversionRecipeEntry> ingredients){
+			public GsonMaterialConversion(String name, int durability, double bufferMultiplier, RGBA color, String recipe, List<GsonConversionRecipeEntry> ingredients){
 				this.name = name;
 				this.durability = durability;
 				this.bufferMultiplier = bufferMultiplier;
@@ -619,7 +526,7 @@ public class ColoringMaterialsManager {
 				this.ingredients = ingredients;
 			}
 
-			public GsonMaterialConversion(String name, int durability, double bufferMultiplier, String color, String recipe, GsonConversionRecipeEntry... ingredients){
+			public GsonMaterialConversion(String name, int durability, double bufferMultiplier, RGBA color, String recipe, GsonConversionRecipeEntry... ingredients){
 				this(name, durability, bufferMultiplier, color, recipe, Lists.newArrayList(ingredients));
 			}
 

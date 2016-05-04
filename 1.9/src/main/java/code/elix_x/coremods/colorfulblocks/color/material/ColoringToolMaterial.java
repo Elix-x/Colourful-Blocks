@@ -16,12 +16,4 @@ public class ColoringToolMaterial {
 		bufferMultiplier = b;
 	}
 
-	public ColoringToolMaterial(String n, int d, int h, double b){
-		this(n, d, new RGBA(h), b);
-	}
-
-	public int getColor(){
-		return rgba.argb();
-	}
-
 }
