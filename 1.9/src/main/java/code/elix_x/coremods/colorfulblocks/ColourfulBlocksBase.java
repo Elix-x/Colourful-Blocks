@@ -23,6 +23,7 @@ import code.elix_x.coremods.colorfulblocks.proxy.IColorfulBlocksProxy;
 import code.elix_x.excore.EXCore;
 import code.elix_x.excore.utils.packets.SmartNetworkWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
@@ -59,6 +60,8 @@ public class ColourfulBlocksBase {
 
 	public static boolean consumeWaterOnErase;
 	public static boolean consumeWaterOnPaint;
+
+	public static ColoringToolProvider<ItemBrush> brushesProvider;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event){
@@ -121,7 +124,7 @@ public class ColourfulBlocksBase {
 
 		mainConfig.save();
 
-		ColoringToolsManager.registerProvider(new ColoringToolProvider<ItemBrush>(){
+		ColoringToolsManager.registerProvider(brushesProvider = new ColoringToolProvider<ItemBrush>(){
 
 			@Override
 			public String getConfigOptionName(){
@@ -138,18 +141,23 @@ public class ColourfulBlocksBase {
 				return (ItemBrush) new ItemBrush(material).setRegistryName(MODID, "brush_" + material.name);
 			}
 
+			@Override
+			public ModelResourceLocation getDefaultModel(){
+				return new ModelResourceLocation(ColourfulBlocksBase.MODID + ":brush", "inventory");
+			}
+
 		});
+		
+		mainConfig.load();
+		ColoringMaterialsManager.init();
+		ColoringToolsManager.init();
+		mainConfig.save();
 
 		proxy.preInit(event);
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event){
-		mainConfig.load();
-		ColoringMaterialsManager.init();
-		ColoringToolsManager.init();
-		mainConfig.save();
-
 		MinecraftForge.EVENT_BUS.register(new SyncColoredBlocksEvent());
 		MinecraftForge.EVENT_BUS.register(new MainipulatePaintEvent());
 

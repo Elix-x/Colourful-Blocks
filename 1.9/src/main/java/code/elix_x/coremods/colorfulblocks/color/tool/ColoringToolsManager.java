@@ -1,6 +1,7 @@
 package code.elix_x.coremods.colorfulblocks.color.tool;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -8,6 +9,9 @@ import java.util.Map.Entry;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 
 import code.elix_x.coremods.colorfulblocks.ColourfulBlocksBase;
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringMaterialsManager;
@@ -34,16 +38,19 @@ public class ColoringToolsManager {
 
 	private static List<ColoringToolProvider<?>> providers = new ArrayList<ColoringToolProvider<?>>();
 
+	private static Multimap<ColoringToolProvider, Item> providersItems = HashMultimap.create();
+
 	public static void init(){
 		logger.info("Creating items and recipes");
 		Configuration config = ColourfulBlocksBase.mainConfig;
 		for(ColoringToolProvider provider : providers){
-			if(config.getBoolean(provider.getConfigOptionName(), "coloring tools", true, "Register " + provider.getConfigOptionName() + " as coloring tools?")){
+			if(config.getBoolean(provider.getConfigOptionName(), "Coloring Tools", true, "Register " + provider.getConfigOptionName() + " as coloring tools?")){
 				logger.info("Creating " + provider.getConfigOptionName());
 				for(Entry<ColoringToolMaterial, Pair<String, Map<String, Object>>> e : ColoringMaterialsManager.getAllMaterialsAndRecipes().entrySet()){
 					logger.debug("Registering underlying tool for material: " + e.getKey().name);
 					Item item = provider.provide(e.getKey());
 					GameRegistry.register(item);
+					providersItems.put(provider, item);
 					if(!e.getValue().getKey().equals(ColoringMaterialsManager.RECIPENAMENULL)){
 						if(!(e.getValue().getKey().equals(ColoringMaterialsManager.RECIPENAMEVANILLA) && e.getValue().getValue().get(ColoringMaterialsManager.RECIPEENTRYMATERIAL) == null)){
 							GameRegistry.addRecipe(RecipeStringTranslator.fromString(new ItemStack(item), e.getValue().getValue(), ColoringMaterialsManager.getRecipe(e.getValue().getKey(), provider.getRecipeType())));
@@ -62,6 +69,10 @@ public class ColoringToolsManager {
 
 	public static List<ColoringToolProvider<?>> getProviders(){
 		return providers;
+	}
+
+	public static <I extends Item & IColoringTool> Collection<I> getAllItems(ColoringToolProvider<I> provider){
+		return (Collection<I>) providersItems.get(provider);
 	}
 
 	/*
