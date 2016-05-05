@@ -26,7 +26,7 @@ public class LastRenderWorldEvent {
 			ItemStack itemstack = player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
 			RGBA color = ((IColoringTool) itemstack.getItem()).getCurrentColor(itemstack);
 			if(color != null){
-				for(BlockPos block : ((IColoringTool) itemstack.getItem()).getBlocksAboutToBeColored(player, itemstack)){
+				for(BlockPos block : ((IColoringTool) itemstack.getItem()).getTargettedBlocks(player, itemstack)){
 					if(block.getBlock(player.worldObj) != Blocks.AIR) renderTint(block, color);
 				}
 			}

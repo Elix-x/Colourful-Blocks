@@ -7,6 +7,7 @@ import code.elix_x.coremods.colorfulblocks.color.material.ColoringMaterialsManag
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringToolMaterial;
 import code.elix_x.excore.utils.color.RGBA;
 import code.elix_x.excore.utils.nbt.mbt.MBT;
+import code.elix_x.excore.utils.pos.BlockPos;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -62,7 +63,17 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	}
 
 	@Override
-	public boolean selectColorOnLeftClickBlock(){
+	public boolean displayDefaultGui(EntityPlayer player, ItemStack itemstack){
+		return true;
+	}
+
+	@Override
+	public boolean colorBlocksOnRightClick(EntityPlayer player, ItemStack itemstack){
+		return true;
+	}
+
+	@Override
+	public boolean pickColorOnLeftClick(EntityPlayer player, ItemStack itemstack){
 		return true;
 	}
 
@@ -90,6 +101,21 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 
 	public void defaultBuffer(ItemStack itemstack){
 		setBuffer(itemstack, defaultBuffer());
+	}
+
+	@Override
+	public boolean colorBlockProceed(EntityPlayer player, ItemStack itemstack, BlockPos pos){
+		if(getBuffer(itemstack) >= 1){
+			itemstack.damageItem(1, player);
+			setBuffer(itemstack, getBuffer(itemstack) - 1);
+			return true;
+		} else if(hasConsumeDyes(player)){
+			itemstack.damageItem(1, player);
+			setBuffer(itemstack, defaultBuffer() - 1);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -178,6 +204,11 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	@Override
 	public boolean isFull3D(){
 		return true;
+	}
+
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged){
+		return oldStack != newStack;
 	}
 
 	/*

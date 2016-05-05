@@ -12,14 +12,20 @@ public interface IColoringTool {
 
 	public ColoringToolMaterial getMaterial();
 
-	public boolean selectColorOnLeftClickBlock();
-
 	public RGBA getCurrentColor(ItemStack itemstack);
 
 	public void setCurrentColor(ItemStack itemstack, RGBA rgba);
 
-	public boolean hasConsumeDyes(EntityPlayer player);
+	public boolean displayDefaultGui(EntityPlayer player, ItemStack itemstack);
 
-	public List<BlockPos> getBlocksAboutToBeColored(EntityPlayer player, ItemStack itemstack);
+	public boolean pickColorOnLeftClick(EntityPlayer player, ItemStack itemstack);
+
+	public boolean colorBlocksOnRightClick(EntityPlayer player, ItemStack itemstack);
+
+	public List<BlockPos> getTargettedBlocks(EntityPlayer player, ItemStack itemstack);
+
+	public boolean colorBlockProceed(EntityPlayer player, ItemStack itemstack, BlockPos pos);
+
+	public boolean hasConsumeDyes(EntityPlayer player);
 
 }
