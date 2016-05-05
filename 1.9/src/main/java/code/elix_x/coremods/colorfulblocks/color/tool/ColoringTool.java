@@ -6,6 +6,7 @@ import code.elix_x.coremods.colorfulblocks.ColourfulBlocksBase;
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringMaterialsManager;
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringToolMaterial;
 import code.elix_x.excore.utils.color.RGBA;
+import code.elix_x.excore.utils.nbt.mbt.MBT;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,11 +14,12 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class ColoringTool extends Item implements IColoringTool {
+
+	public static final MBT mbt = new MBT();
 
 	protected ColoringToolMaterial material;
 
@@ -37,6 +39,18 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	}
 
 	/*
+	 * NBT
+	 */
+
+	public ColoringToolData getData(ItemStack itemstack){
+		return mbt.fromNBT(itemstack.getSubCompound("Coloring Tool", true), ColoringToolData.class);
+	}
+
+	public void setData(ItemStack itemstack, ColoringToolData data){
+		itemstack.setTagInfo("Coloring Tool", mbt.toNBT(data));
+	}
+
+	/*
 	 * Override
 	 */
 
@@ -52,13 +66,28 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 
 	@Override
 	public RGBA getCurrentColor(ItemStack itemstack){
-		return getCurrentRGBA(itemstack);
+		return getData(itemstack).color;
 	}
 
 	@Override
 	public void setCurrentColor(ItemStack itemstack, RGBA rgba){
-		defaultBuffer(itemstack);
-		setCurrentRGBA(itemstack, rgba);
+		setData(itemstack, new ColoringToolData(rgba, defaultBuffer()));;
+	}
+
+	public double defaultBuffer(){
+		return DEFAULTBUFFER * material.bufferMultiplier;
+	}
+
+	public double getBuffer(ItemStack itemstack){
+		return getData(itemstack).buffer;
+	}
+
+	public void setBuffer(ItemStack itemstack, double buffer){
+		setData(itemstack, getData(itemstack).setBuffer(buffer));
+	}
+
+	public void defaultBuffer(ItemStack itemstack){
+		setBuffer(itemstack, defaultBuffer());
 	}
 
 	@Override
@@ -141,95 +170,6 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	}
 
 	/*
-	 * NBT
-	 */
-
-	public void fixTags(ItemStack itemstack){
-		NBTTagCompound nbt = itemstack.getTagCompound();
-		if(nbt == null){
-			nbt = new NBTTagCompound();
-		}
-
-		{
-			NBTTagCompound tag = nbt.getCompoundTag("tag");
-			if(tag == null){
-				tag = new NBTTagCompound();
-			}
-
-			{
-				NBTTagCompound color = tag.getCompoundTag("color");
-				if(color == null){
-					color = new NBTTagCompound();
-				}
-
-				{
-					if(!color.hasKey("r")){
-						color.setInteger("r", 0);
-					}
-					if(!color.hasKey("g")){
-						color.setInteger("g", 0);
-					}
-					if(!color.hasKey("b")){
-						color.setInteger("b", 0);
-					}
-					if(!color.hasKey("a")){
-						color.setInteger("a", 100);
-					}
-
-					if(!color.hasKey("buffer")){
-						color.setDouble("buffer", material.bufferMultiplier * DEFAULTBUFFER);
-					}
-
-				}
-
-				tag.setTag("color", color);
-
-			}
-
-			nbt.setTag("tag", tag);
-
-		}
-
-		itemstack.setTagCompound(nbt);
-	}
-
-	public NBTTagCompound getColorTag(ItemStack itemstack){
-		fixTags(itemstack);
-		return itemstack.getTagCompound().getCompoundTag("tag").getCompoundTag("color");
-	}
-
-	public void setColorTag(ItemStack itemstack, NBTTagCompound nbt){
-		fixTags(itemstack);
-		itemstack.getTagCompound().getCompoundTag("tag").setTag("color", nbt);
-	}
-
-	public RGBA getCurrentRGBA(ItemStack itemstack){
-		fixTags(itemstack);
-		return RGBA.createFromNBT(getColorTag(itemstack));
-	}
-
-	public void setCurrentRGBA(ItemStack itemstack, RGBA rgba){
-		fixTags(itemstack);
-		NBTTagCompound nbt = getColorTag(itemstack);
-		setColorTag(itemstack, rgba.writeToNBT(nbt));
-	}
-
-	public double getBuffer(ItemStack itemstack){
-		fixTags(itemstack);
-		return getColorTag(itemstack).getDouble("buffer");
-	}
-
-	public void setBuffer(ItemStack itemstack, double buffer){
-		fixTags(itemstack);
-		getColorTag(itemstack).setDouble("buffer", buffer);
-	}
-
-	public void defaultBuffer(ItemStack itemstack){
-		fixTags(itemstack);
-		setBuffer(itemstack, material.bufferMultiplier * DEFAULTBUFFER);
-	}
-
-	/*
 	 * Rendering
 	 */
 
@@ -250,22 +190,52 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean shift){
 		if(GuiScreen.isShiftKeyDown()){
-			list.add(I18n.translateToLocal("coloringtool.desc.color.red") + ": " + getCurrentRGBA(itemstack).getRF() * 100f + "% (" + getCurrentRGBA(itemstack).getRI() + "/255)");
-			list.add(I18n.translateToLocal("coloringtool.desc.color.green") + ": " + getCurrentRGBA(itemstack).getGF() * 100f + "% (" + getCurrentRGBA(itemstack).getGI() + "/255)");
-			list.add(I18n.translateToLocal("coloringtool.desc.color.blue") + ": " + getCurrentRGBA(itemstack).getBF() * 100f + "% (" + getCurrentRGBA(itemstack).getBI() + "/255)");
-			list.add(I18n.translateToLocal("coloringtool.desc.buffer") + ": " + (double) getBuffer(itemstack) / (DEFAULTBUFFER * material.bufferMultiplier) * 100 + "% (" + getBuffer(itemstack) + "/" + DEFAULTBUFFER * material.bufferMultiplier + ")");
+			list.add(I18n.translateToLocal("coloringtool.desc.color.red") + ": " + getCurrentColor(itemstack).getRF() * 100f + "% (" + getCurrentColor(itemstack).getRI() + "/255)");
+			list.add(I18n.translateToLocal("coloringtool.desc.color.green") + ": " + getCurrentColor(itemstack).getGF() * 100f + "% (" + getCurrentColor(itemstack).getGI() + "/255)");
+			list.add(I18n.translateToLocal("coloringtool.desc.color.blue") + ": " + getCurrentColor(itemstack).getBF() * 100f + "% (" + getCurrentColor(itemstack).getBI() + "/255)");
+			list.add(I18n.translateToLocal("coloringtool.desc.buffer") + ": " + getBuffer(itemstack) / (DEFAULTBUFFER * material.bufferMultiplier) * 100 + "% (" + getBuffer(itemstack) + "/" + DEFAULTBUFFER * material.bufferMultiplier + ")");
 			list.add(I18n.translateToLocal("coloringtool.desc.durability") + ": " + (float) (itemstack.getMaxDamage() - itemstack.getItemDamage()) / itemstack.getMaxDamage() * 100  + "% (" + itemstack.getItemDamage() + "/" + itemstack.getMaxDamage() + ")");
 		} else {
-			list.add(I18n.translateToLocal("coloringtool.desc.color.red") + ": " + getCurrentRGBA(itemstack).getRF() * 100f + "%");
-			list.add(I18n.translateToLocal("coloringtool.desc.color.green") + ": " + getCurrentRGBA(itemstack).getGF() * 100f + "%");
-			list.add(I18n.translateToLocal("coloringtool.desc.color.blue") + ": " + getCurrentRGBA(itemstack).getBF() * 100f + "%");
-			list.add(I18n.translateToLocal("coloringtool.desc.buffer") + ": " + (double) getBuffer(itemstack) / (DEFAULTBUFFER * material.bufferMultiplier) * 100 + "%");
+			list.add(I18n.translateToLocal("coloringtool.desc.color.red") + ": " + getCurrentColor(itemstack).getRF() * 100f + "%");
+			list.add(I18n.translateToLocal("coloringtool.desc.color.green") + ": " + getCurrentColor(itemstack).getGF() * 100f + "%");
+			list.add(I18n.translateToLocal("coloringtool.desc.color.blue") + ": " + getCurrentColor(itemstack).getBF() * 100f + "%");
+			list.add(I18n.translateToLocal("coloringtool.desc.buffer") + ": " + getBuffer(itemstack) / (DEFAULTBUFFER * material.bufferMultiplier) * 100 + "%");
 			list.add(I18n.translateToLocal("coloringtool.desc.durability") + ": " + (float) (itemstack.getMaxDamage() - itemstack.getItemDamage()) / itemstack.getMaxDamage() * 100  + "%");
 		}
 	}
 
+	public static class ColoringToolData {
 
+		public RGBA color;
+		public double buffer;
 
+		private ColoringToolData(){
 
+		}
+
+		public ColoringToolData(RGBA color, double buffer){
+			this.color = color;
+			this.buffer = buffer;
+		}
+
+		public RGBA getColor(){
+			return color;
+		}
+
+		public ColoringToolData setColor(RGBA color){
+			this.color = color;
+			return this;
+		}
+
+		public double getBuffer(){
+			return buffer;
+		}
+
+		public ColoringToolData setBuffer(double buffer){
+			this.buffer = buffer;
+			return this;
+		}
+
+	}
 
 }

@@ -58,7 +58,7 @@ public class ItemBrush extends ColoringTool {
 		if(buffer){
 			itemstack.damageItem(1, player);
 			setBuffer(itemstack, getBuffer(itemstack) - 1);
-			ColoredBlocksManager.get(world).addRGBA(new BlockPos(pos), getCurrentRGBA(itemstack));
+			ColoredBlocksManager.get(world).addRGBA(new BlockPos(pos), getCurrentColor(itemstack));
 			return EnumActionResult.SUCCESS;
 		} else {
 			return EnumActionResult.FAIL;
