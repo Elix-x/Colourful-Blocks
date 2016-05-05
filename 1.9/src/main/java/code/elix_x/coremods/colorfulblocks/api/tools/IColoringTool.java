@@ -1,8 +1,8 @@
-package code.elix_x.coremods.colorfulblocks.color.tool;
+package code.elix_x.coremods.colorfulblocks.api.tools;
 
 import java.util.List;
 
-import code.elix_x.coremods.colorfulblocks.color.material.ColoringToolMaterial;
+import code.elix_x.coremods.colorfulblocks.api.materials.ColoringToolMaterial;
 import code.elix_x.excore.utils.color.RGBA;
 import code.elix_x.excore.utils.pos.BlockPos;
 import net.minecraft.entity.player.EntityPlayer;

@@ -1,9 +1,9 @@
 package code.elix_x.coremods.colorfulblocks.events;
 
 import code.elix_x.coremods.colorfulblocks.ColorfulBlocksBase;
+import code.elix_x.coremods.colorfulblocks.api.tools.IColoringTool;
 import code.elix_x.coremods.colorfulblocks.color.ColoredBlocksManager;
 import code.elix_x.coremods.colorfulblocks.color.tool.ColoringToolsManager;
-import code.elix_x.coremods.colorfulblocks.color.tool.IColoringTool;
 import code.elix_x.excore.utils.color.RGBA;
 import code.elix_x.excore.utils.pos.BlockPos;
 import net.minecraft.entity.player.EntityPlayer;

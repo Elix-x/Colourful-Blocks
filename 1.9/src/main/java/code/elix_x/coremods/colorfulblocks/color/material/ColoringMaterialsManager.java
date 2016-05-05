@@ -24,6 +24,8 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import code.elix_x.coremods.colorfulblocks.ColorfulBlocksBase;
+import code.elix_x.coremods.colorfulblocks.api.ColorfulBlocksAPI;
+import code.elix_x.coremods.colorfulblocks.api.materials.ColoringToolMaterial;
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringMaterialsManager.GsonMaterialsConversion.GsonMaterialConversion;
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringMaterialsManager.GsonMaterialsConversion.GsonMaterialConversion.GsonConversionRecipeEntry;
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringMaterialsManager.GsonRecipesConversion.GsonRecipeHandlerConversion;
@@ -46,14 +48,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ColoringMaterialsManager {
-
-	public static final String RECIPENAMENULL = "NULL";
-	public static final String RECIPENAMEVANILLA = "VANILLA";
-	public static final String RECIPETYPEBRUSH = "BRUSH";
-	public static final String RECIPEENTRYMATERIAL = "<MATERIAL>";
-	public static final String COLORINGTOOLLANG = "item.coloringtool";
-	public static final String COLORINGTOOLNAMEORDERLANG = COLORINGTOOLLANG + ".nameorder";
-	public static final String COLORINGTOOLMATERIALLANG = "coloringtoolmaterial";
 
 	public static final Logger logger = LogManager.getLogger("CoB Materials Manager");
 
@@ -186,11 +180,11 @@ public class ColoringMaterialsManager {
 		vanillaDir.mkdirs();
 
 		GsonMaterialsConversion conversion = new GsonMaterialsConversion(
-				new GsonMaterialConversion(ToolMaterial.WOOD.name(), ToolMaterial.WOOD.getMaxUses(), ToolMaterial.WOOD.getHarvestLevel(), new RGBA(110, 65, 43), RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, "oreDict:plankWood")),
-				new GsonMaterialConversion(ToolMaterial.STONE.name(), ToolMaterial.STONE.getMaxUses(), ToolMaterial.STONE.getHarvestLevel(), new RGBA(77, 77, 77), RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, "oreDict:cobblestone")),
-				new GsonMaterialConversion(ToolMaterial.IRON.name(), ToolMaterial.IRON.getMaxUses(), ToolMaterial.IRON.getHarvestLevel(), new RGBA(153, 153, 153), RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, "oreDict:ingotIron")),
-				new GsonMaterialConversion(ToolMaterial.GOLD.name(), ToolMaterial.GOLD.getMaxUses(), ToolMaterial.GOLD.getHarvestLevel(), new RGBA(186, 154, 9), RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, "oreDict:ingotGold")),
-				new GsonMaterialConversion(ToolMaterial.DIAMOND.name(), ToolMaterial.DIAMOND.getMaxUses(), ToolMaterial.DIAMOND.getHarvestLevel(), new RGBA(39, 207, 230), RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, "oreDict:gemDiamond"))
+				new GsonMaterialConversion(ToolMaterial.WOOD.name(), ToolMaterial.WOOD.getMaxUses(), ToolMaterial.WOOD.getHarvestLevel(), new RGBA(110, 65, 43), ColorfulBlocksAPI.RECIPENAMEVANILLA, new GsonConversionRecipeEntry(ColorfulBlocksAPI.RECIPEENTRYMATERIAL, "oreDict:plankWood")),
+				new GsonMaterialConversion(ToolMaterial.STONE.name(), ToolMaterial.STONE.getMaxUses(), ToolMaterial.STONE.getHarvestLevel(), new RGBA(77, 77, 77), ColorfulBlocksAPI.RECIPENAMEVANILLA, new GsonConversionRecipeEntry(ColorfulBlocksAPI.RECIPEENTRYMATERIAL, "oreDict:cobblestone")),
+				new GsonMaterialConversion(ToolMaterial.IRON.name(), ToolMaterial.IRON.getMaxUses(), ToolMaterial.IRON.getHarvestLevel(), new RGBA(153, 153, 153), ColorfulBlocksAPI.RECIPENAMEVANILLA, new GsonConversionRecipeEntry(ColorfulBlocksAPI.RECIPEENTRYMATERIAL, "oreDict:ingotIron")),
+				new GsonMaterialConversion(ToolMaterial.GOLD.name(), ToolMaterial.GOLD.getMaxUses(), ToolMaterial.GOLD.getHarvestLevel(), new RGBA(186, 154, 9), ColorfulBlocksAPI.RECIPENAMEVANILLA, new GsonConversionRecipeEntry(ColorfulBlocksAPI.RECIPEENTRYMATERIAL, "oreDict:ingotGold")),
+				new GsonMaterialConversion(ToolMaterial.DIAMOND.name(), ToolMaterial.DIAMOND.getMaxUses(), ToolMaterial.DIAMOND.getHarvestLevel(), new RGBA(39, 207, 230), ColorfulBlocksAPI.RECIPENAMEVANILLA, new GsonConversionRecipeEntry(ColorfulBlocksAPI.RECIPEENTRYMATERIAL, "oreDict:gemDiamond"))
 				);
 
 		File materials = new File(vanillaDir, "materials.json");
@@ -209,7 +203,7 @@ public class ColoringMaterialsManager {
 		for(ToolMaterial mat : ToolMaterial.values()){
 			if(mat != ToolMaterial.WOOD && mat != ToolMaterial.STONE && mat != ToolMaterial.IRON && mat != ToolMaterial.GOLD && mat != ToolMaterial.DIAMOND){
 				logger.debug("Found modded tool material. Generating coloring tool material from it.");
-				conversion.materials.add(new GsonMaterialConversion(mat.name(), mat.getMaxUses(), mat.getHarvestLevel(), FMLCommonHandler.instance().getSide() == Side.CLIENT ? recognizeColorToRGBA(mat) : new RGBA(0, 0, 0), RECIPENAMEVANILLA, new GsonConversionRecipeEntry(RECIPEENTRYMATERIAL, ItemStackStringTranslator.toString(recognizeRepairItem(mat)))));
+				conversion.materials.add(new GsonMaterialConversion(mat.name(), mat.getMaxUses(), mat.getHarvestLevel(), FMLCommonHandler.instance().getSide() == Side.CLIENT ? recognizeColorToRGBA(mat) : new RGBA(0, 0, 0), ColorfulBlocksAPI.RECIPENAMEVANILLA, new GsonConversionRecipeEntry(ColorfulBlocksAPI.RECIPEENTRYMATERIAL, ItemStackStringTranslator.toString(recognizeRepairItem(mat)))));
 			}
 		}
 
@@ -235,10 +229,10 @@ public class ColoringMaterialsManager {
 		vanillaDir.mkdirs();
 
 		Map<String, String> map = new HashMap<String, String>();
-		map.put(RECIPEENTRYMATERIAL, RECIPEENTRYMATERIAL);
+		map.put(ColorfulBlocksAPI.RECIPEENTRYMATERIAL, ColorfulBlocksAPI.RECIPEENTRYMATERIAL);
 		GsonRecipesConversion conversion = new GsonRecipesConversion(
-				new GsonRecipeHandlerConversion(RECIPENAMEVANILLA, 
-						new GsonRecipeConversion(RECIPETYPEBRUSH, RecipeStringTranslator.toString(map, "  #", " % ", "$  ", '#', Blocks.WOOL, '%', RECIPEENTRYMATERIAL, '$', "stickWood"))
+				new GsonRecipeHandlerConversion(ColorfulBlocksAPI.RECIPENAMEVANILLA, 
+						new GsonRecipeConversion(ColorfulBlocksAPI.RECIPETYPEBRUSH, RecipeStringTranslator.toString(map, "  #", " % ", "$  ", '#', Blocks.WOOL, '%', ColorfulBlocksAPI.RECIPEENTRYMATERIAL, '$', "stickWood"))
 						)
 				);
 		File materials = new File(vanillaDir, "recipes.json");
@@ -272,15 +266,15 @@ public class ColoringMaterialsManager {
 		File en_US = new File(lang, "en_US.lang");
 		en_US.createNewFile();
 		String s = "";
-		s += COLORINGTOOLMATERIALLANG + ".WOOD=Wooden";
+		s += ColorfulBlocksAPI.COLORINGTOOLMATERIALLANG + ".WOOD=Wooden";
 		s += "\n";
-		s += COLORINGTOOLMATERIALLANG + ".STONE=Stone";
+		s += ColorfulBlocksAPI.COLORINGTOOLMATERIALLANG + ".STONE=Stone";
 		s += "\n";
-		s += COLORINGTOOLMATERIALLANG + ".IRON=Iron";
+		s += ColorfulBlocksAPI.COLORINGTOOLMATERIALLANG + ".IRON=Iron";
 		s += "\n";
-		s += COLORINGTOOLMATERIALLANG + ".GOLD=Golden";
+		s += ColorfulBlocksAPI.COLORINGTOOLMATERIALLANG + ".GOLD=Golden";
 		s += "\n";
-		s += COLORINGTOOLMATERIALLANG + ".DIAMOND=Diamond";
+		s += ColorfulBlocksAPI.COLORINGTOOLMATERIALLANG + ".DIAMOND=Diamond";
 		FileWriter writer = new FileWriter(en_US);
 		writer.write(s);
 		writer.close();
@@ -297,7 +291,7 @@ public class ColoringMaterialsManager {
 		for(ToolMaterial mat : ToolMaterial.values()){
 			if(mat != ToolMaterial.WOOD && mat != ToolMaterial.STONE && mat != ToolMaterial.IRON && mat != ToolMaterial.GOLD && mat != ToolMaterial.DIAMOND){
 				logger.debug("Found modded tool material. Generating coloring tool material localisations from it.");
-				s += COLORINGTOOLMATERIALLANG + "." + mat.name();
+				s += ColorfulBlocksAPI.COLORINGTOOLMATERIALLANG + "." + mat.name();
 				s += "=";
 				s += mat.name().charAt(0) + mat.name().substring(1, mat.name().length()).toLowerCase();
 				s += "\n";

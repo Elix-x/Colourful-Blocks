@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import code.elix_x.coremods.colorfulblocks.color.material.ColoringToolMaterial;
-import code.elix_x.coremods.colorfulblocks.color.tool.ColoringTool;
+import code.elix_x.coremods.colorfulblocks.api.materials.ColoringToolMaterial;
+import code.elix_x.coremods.colorfulblocks.api.tools.ColoringTool;
 import code.elix_x.excore.utils.pos.BlockPos;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

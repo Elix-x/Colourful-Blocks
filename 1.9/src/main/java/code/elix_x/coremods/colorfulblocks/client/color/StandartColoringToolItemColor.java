@@ -1,6 +1,6 @@
 package code.elix_x.coremods.colorfulblocks.client.color;
 
-import code.elix_x.coremods.colorfulblocks.color.tool.IColoringTool;
+import code.elix_x.coremods.colorfulblocks.api.tools.IColoringTool;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.ItemStack;
 

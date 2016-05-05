@@ -14,8 +14,11 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import code.elix_x.coremods.colorfulblocks.ColorfulBlocksBase;
+import code.elix_x.coremods.colorfulblocks.api.ColorfulBlocksAPI;
+import code.elix_x.coremods.colorfulblocks.api.materials.ColoringToolMaterial;
+import code.elix_x.coremods.colorfulblocks.api.tools.ColoringToolProvider;
+import code.elix_x.coremods.colorfulblocks.api.tools.IColoringTool;
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringMaterialsManager;
-import code.elix_x.coremods.colorfulblocks.color.material.ColoringToolMaterial;
 import code.elix_x.excore.utils.color.RGBA;
 import code.elix_x.excore.utils.recipes.RecipeStringTranslator;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,8 +54,8 @@ public class ColoringToolsManager {
 					Item item = provider.provide(e.getKey());
 					GameRegistry.register(item);
 					providersItems.put(provider, item);
-					if(!e.getValue().getKey().equals(ColoringMaterialsManager.RECIPENAMENULL)){
-						if(!(e.getValue().getKey().equals(ColoringMaterialsManager.RECIPENAMEVANILLA) && e.getValue().getValue().get(ColoringMaterialsManager.RECIPEENTRYMATERIAL) == null)){
+					if(!e.getValue().getKey().equals(ColorfulBlocksAPI.RECIPENAMENULL)){
+						if(!(e.getValue().getKey().equals(ColorfulBlocksAPI.RECIPENAMEVANILLA) && e.getValue().getValue().get(ColorfulBlocksAPI.RECIPEENTRYMATERIAL) == null)){
 							GameRegistry.addRecipe(RecipeStringTranslator.fromString(new ItemStack(item), e.getValue().getValue(), ColoringMaterialsManager.getRecipe(e.getValue().getKey(), provider.getRecipeType())));
 						} else {
 							logger.warn("Coloring tool material " + e.getKey().name + " has recipe set to vanilla, but crafting item to null. Please define crafting item or set recipe to NULL.");

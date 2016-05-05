@@ -13,6 +13,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import code.elix_x.coremods.colorfulblocks.ColorfulBlocksBase;
+import code.elix_x.coremods.colorfulblocks.api.world.IColoredBlocksManager;
 import code.elix_x.coremods.colorfulblocks.net.ColorfulBlocksSyncMessage;
 import code.elix_x.excore.utils.color.RGBA;
 import code.elix_x.excore.utils.nbt.mbt.MBT;
@@ -30,7 +31,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ColoredBlocksManager extends WorldSavedData {
+public class ColoredBlocksManager extends WorldSavedData implements IColoredBlocksManager {
 
 	public static final Logger logger = LogManager.getLogger("Colored Blocks Manager");
 

@@ -1,6 +1,6 @@
-package code.elix_x.coremods.colorfulblocks.color.tool;
+package code.elix_x.coremods.colorfulblocks.api.tools;
 
-import code.elix_x.coremods.colorfulblocks.color.material.ColoringToolMaterial;
+import code.elix_x.coremods.colorfulblocks.api.materials.ColoringToolMaterial;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 

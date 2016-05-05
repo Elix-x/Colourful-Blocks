@@ -1,10 +1,9 @@
-package code.elix_x.coremods.colorfulblocks.color.tool;
+package code.elix_x.coremods.colorfulblocks.api.tools;
 
 import java.util.List;
 
-import code.elix_x.coremods.colorfulblocks.ColorfulBlocksBase;
-import code.elix_x.coremods.colorfulblocks.color.material.ColoringMaterialsManager;
-import code.elix_x.coremods.colorfulblocks.color.material.ColoringToolMaterial;
+import code.elix_x.coremods.colorfulblocks.api.ColorfulBlocksAPI;
+import code.elix_x.coremods.colorfulblocks.api.materials.ColoringToolMaterial;
 import code.elix_x.excore.utils.color.RGBA;
 import code.elix_x.excore.utils.nbt.mbt.MBT;
 import code.elix_x.excore.utils.pos.BlockPos;
@@ -84,7 +83,7 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 
 	@Override
 	public void setCurrentColor(ItemStack itemstack, RGBA rgba){
-		setData(itemstack, new ColoringToolData(rgba, defaultBuffer()));;
+		setData(itemstack, new ColoringToolData(rgba, defaultBuffer()));
 	}
 
 	public double defaultBuffer(){
@@ -185,7 +184,7 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 					player.inventory.setInventorySlotContents(bs, itemstack);
 				}
 
-				if(ColorfulBlocksBase.consumeWaterOnPaint){
+				if(ColorfulBlocksAPI.INSTANCE.consumeWaterOnPaint()){
 					player.inventory.decrStackSize(player.inventory.getSlotFor(new ItemStack(Items.WATER_BUCKET)), 1);
 					player.inventory.addItemStackToInventory(new ItemStack(Items.BUCKET));
 				}
@@ -217,7 +216,7 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack){
-		return I18n.translateToLocal(ColoringMaterialsManager.COLORINGTOOLNAMEORDERLANG).replace("%material", I18n.translateToLocal(ColoringMaterialsManager.COLORINGTOOLMATERIALLANG + "." + material.name)).replace("%tool", I18n.translateToLocal(ColoringMaterialsManager.COLORINGTOOLLANG + "." + NAME));
+		return I18n.translateToLocal(ColorfulBlocksAPI.COLORINGTOOLNAMEORDERLANG).replace("%material", I18n.translateToLocal(ColorfulBlocksAPI.COLORINGTOOLMATERIALLANG + "." + material.name)).replace("%tool", I18n.translateToLocal(ColorfulBlocksAPI.COLORINGTOOLLANG + "." + NAME));
 	}
 
 	@Override

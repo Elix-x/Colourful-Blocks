@@ -2,7 +2,7 @@ package code.elix_x.coremods.colorfulblocks.client.events;
 
 import org.lwjgl.opengl.GL11;
 
-import code.elix_x.coremods.colorfulblocks.color.tool.IColoringTool;
+import code.elix_x.coremods.colorfulblocks.api.tools.IColoringTool;
 import code.elix_x.excore.utils.color.RGBA;
 import code.elix_x.excore.utils.pos.BlockPos;
 import net.minecraft.client.Minecraft;

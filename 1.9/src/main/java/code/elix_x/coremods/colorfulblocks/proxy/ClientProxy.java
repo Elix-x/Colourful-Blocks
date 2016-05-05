@@ -15,14 +15,14 @@ import java.util.regex.Pattern;
 import com.google.common.collect.Sets;
 
 import code.elix_x.coremods.colorfulblocks.ColorfulBlocksBase;
+import code.elix_x.coremods.colorfulblocks.api.tools.ColoringToolProvider;
+import code.elix_x.coremods.colorfulblocks.api.tools.IColoringTool;
 import code.elix_x.coremods.colorfulblocks.client.color.ColorfulBlocksBlockColor;
 import code.elix_x.coremods.colorfulblocks.client.color.StandartColoringToolItemColor;
 import code.elix_x.coremods.colorfulblocks.client.events.LastRenderWorldEvent;
 import code.elix_x.coremods.colorfulblocks.client.gui.GuiSelectColor;
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringMaterialsManager;
-import code.elix_x.coremods.colorfulblocks.color.tool.ColoringToolProvider;
 import code.elix_x.coremods.colorfulblocks.color.tool.ColoringToolsManager;
-import code.elix_x.coremods.colorfulblocks.color.tool.IColoringTool;
 import code.elix_x.excore.utils.reflection.AdvancedReflectionHelper.AField;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
