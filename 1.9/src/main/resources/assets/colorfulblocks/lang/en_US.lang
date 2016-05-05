@@ -7,6 +7,5 @@ coloringtool.desc.color.blue=Blue
 coloringtool.desc.buffer=Buffer
 coloringtool.desc.durability=Durability
 
-guiselectcolor.button.random=Random
 guiselectcolor.button.done=Done
 message.nodies=You don't have required dies in your inventory!

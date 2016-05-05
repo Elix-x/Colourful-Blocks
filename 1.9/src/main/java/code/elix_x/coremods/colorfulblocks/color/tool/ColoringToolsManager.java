@@ -84,12 +84,12 @@ public class ColoringToolsManager {
 			if(((IColoringTool) player.getHeldItemMainhand().getItem()).hasConsumeDyes(player)){
 				((IColoringTool) player.getHeldItemMainhand().getItem()).setCurrentColor(player.getHeldItemMainhand(), rgba);
 			} else {
-				notifiyNoDyes(player);
+				notifyNoDyes(player);
 			}
 		}
 	}
 
-	public static void notifiyNoDyes(EntityPlayer player){
+	public static void notifyNoDyes(EntityPlayer player){
 		player.addChatMessage(new TextComponentString(I18n.translateToLocal("message.nodies")).setStyle(new Style().setColor(TextFormatting.RED)));
 	}
 
