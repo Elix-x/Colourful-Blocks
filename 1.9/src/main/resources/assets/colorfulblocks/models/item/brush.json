@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "colorfulblocks:items/brush_handle",
+        "layer1": "colorfulblocks:items/brush_top"
+    }
+}
