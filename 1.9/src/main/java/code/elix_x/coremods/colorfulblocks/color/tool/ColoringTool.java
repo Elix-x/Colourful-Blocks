@@ -43,11 +43,13 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 	 */
 
 	public ColoringToolData getData(ItemStack itemstack){
-		return mbt.fromNBT(itemstack.getSubCompound("Coloring Tool", true), ColoringToolData.class);
+		ColoringToolData data = mbt.fromNBT(itemstack.getSubCompound("Coloring Tool Data", true), ColoringToolData.class);
+		if(data == null || data.color == null) data = new ColoringToolData(new RGBA(0, 0, 0), defaultBuffer());
+		return data;
 	}
 
 	public void setData(ItemStack itemstack, ColoringToolData data){
-		itemstack.setTagInfo("Coloring Tool", mbt.toNBT(data));
+		itemstack.setTagInfo("Coloring Tool Data", mbt.toNBT(data));
 	}
 
 	/*
