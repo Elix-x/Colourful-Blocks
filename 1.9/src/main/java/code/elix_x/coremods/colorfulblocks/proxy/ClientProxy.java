@@ -28,14 +28,7 @@ public class ClientProxy implements IColorfulBlocksProxy {
 
 	@Override
 	public void preInit(FMLPreInitializationEvent event){
-		for(ColoringToolProvider provider : ColoringToolsManager.getProviders()){
-			ModelResourceLocation def = provider.getDefaultModel();
-			if(def != null){
-				for(Item item : (Collection<Item>) ColoringToolsManager.getAllItems(provider)){
-					ModelLoader.setCustomModelResourceLocation(item, 0, def);
-				}
-			}
-		}
+
 	}
 
 	@Override
@@ -43,8 +36,11 @@ public class ClientProxy implements IColorfulBlocksProxy {
 		MinecraftForge.EVENT_BUS.register(new LastRenderWorldEvent());
 
 		for(ColoringToolProvider provider : ColoringToolsManager.getProviders()){
-			if(provider.getDefaultModel() != null){
+			ModelResourceLocation def = provider.getDefaultModel();
+			if(def != null){
 				for(Item item : (Collection<Item>) ColoringToolsManager.getAllItems(provider)){
+					ModelLoader.setCustomModelResourceLocation(item, 0, def);
+					Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, def);
 					Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new StandartColoringToolItemColor(0, 1), item);
 				}
 			}

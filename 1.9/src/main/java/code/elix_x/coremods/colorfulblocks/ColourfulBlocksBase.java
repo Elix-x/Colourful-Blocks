@@ -147,17 +147,17 @@ public class ColourfulBlocksBase {
 			}
 
 		});
-		
-		mainConfig.load();
-		ColoringMaterialsManager.init();
-		ColoringToolsManager.init();
-		mainConfig.save();
 
 		proxy.preInit(event);
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event){
+		mainConfig.load();
+		ColoringMaterialsManager.init();
+		ColoringToolsManager.init();
+		mainConfig.save();
+
 		MinecraftForge.EVENT_BUS.register(new SyncColoredBlocksEvent());
 		MinecraftForge.EVENT_BUS.register(new MainipulatePaintEvent());
 
