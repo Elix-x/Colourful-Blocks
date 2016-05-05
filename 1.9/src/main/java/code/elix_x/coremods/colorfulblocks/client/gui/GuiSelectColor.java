@@ -1,4 +1,4 @@
-package code.elix_x.coremods.colorfulblocks.gui;
+package code.elix_x.coremods.colorfulblocks.client.gui;
 
 import code.elix_x.coremods.colorfulblocks.ColourfulBlocksBase;
 import code.elix_x.coremods.colorfulblocks.net.ColorChangeMessage;

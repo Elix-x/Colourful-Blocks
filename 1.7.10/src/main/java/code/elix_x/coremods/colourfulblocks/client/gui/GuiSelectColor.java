@@ -1,4 +1,4 @@
-package code.elix_x.coremods.colourfulblocks.gui;
+package code.elix_x.coremods.colourfulblocks.client.gui;
 
 import java.util.Random;
 

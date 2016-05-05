@@ -1,8 +1,8 @@
 package code.elix_x.coremods.colourfulblocks.proxy;
 
 import code.elix_x.coremods.colourfulblocks.client.events.LastRenderWorldEvent;
+import code.elix_x.coremods.colourfulblocks.client.gui.GuiSelectColor;
 import code.elix_x.coremods.colourfulblocks.color.tool.IColoringTool;
-import code.elix_x.coremods.colourfulblocks.gui.GuiSelectColor;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
