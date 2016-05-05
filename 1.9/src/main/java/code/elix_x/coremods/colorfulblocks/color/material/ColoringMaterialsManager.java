@@ -23,7 +23,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import code.elix_x.coremods.colorfulblocks.ColourfulBlocksBase;
+import code.elix_x.coremods.colorfulblocks.ColorfulBlocksBase;
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringMaterialsManager.GsonMaterialsConversion.GsonMaterialConversion;
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringMaterialsManager.GsonMaterialsConversion.GsonMaterialConversion.GsonConversionRecipeEntry;
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringMaterialsManager.GsonRecipesConversion.GsonRecipeHandlerConversion;
@@ -66,7 +66,7 @@ public class ColoringMaterialsManager {
 	private static Map<ColoringToolMaterial, Pair<String, Map<String, Object>>> materialRecipe = new HashMap<ColoringToolMaterial, Pair<String, Map<String, Object>>>();
 
 	public static void init(){
-		extensionsDir = new File(ColourfulBlocksBase.configFolder, "extensions");
+		extensionsDir = new File(ColorfulBlocksBase.configFolder, "extensions");
 		if(!extensionsDir.exists()){
 			extensionsDir.mkdirs();
 			logger.info("Generating extensions");
@@ -75,7 +75,7 @@ public class ColoringMaterialsManager {
 			initLocalisations();
 		}
 		logger.info("Fixing extensions");
-		if(FMLCommonHandler.instance().getSide() == Side.CLIENT && ColourfulBlocksBase.mainConfig.getBoolean("fixColors", "json", true, "Fix color for items with color \"0\" or \"0:0:0\" or \"0:0:0:0\", but with valid crafting item.")){
+		if(FMLCommonHandler.instance().getSide() == Side.CLIENT && ColorfulBlocksBase.mainConfig.getBoolean("fixColors", "json", true, "Fix color for items with color \"0\" or \"0:0:0\" or \"0:0:0:0\", but with valid crafting item.")){
 			fixColors();
 		}
 		logger.info("Loading extensions");
@@ -435,7 +435,7 @@ public class ColoringMaterialsManager {
 	}
 
 	private static void loadLocalisations(){
-		ColourfulBlocksBase.proxy.loadLocalisations();
+		ColorfulBlocksBase.proxy.loadLocalisations();
 	}
 
 	/*

@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-import code.elix_x.coremods.colorfulblocks.ColourfulBlocksBase;
+import code.elix_x.coremods.colorfulblocks.ColorfulBlocksBase;
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringMaterialsManager;
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringToolMaterial;
 import code.elix_x.excore.utils.color.RGBA;
@@ -42,7 +42,7 @@ public class ColoringToolsManager {
 
 	public static void init(){
 		logger.info("Creating items and recipes");
-		Configuration config = ColourfulBlocksBase.mainConfig;
+		Configuration config = ColorfulBlocksBase.mainConfig;
 		for(ColoringToolProvider provider : providers){
 			if(config.getBoolean(provider.getConfigOptionName(), "Coloring Tools", true, "Register " + provider.getConfigOptionName() + " as coloring tools?")){
 				logger.info("Creating " + provider.getConfigOptionName());

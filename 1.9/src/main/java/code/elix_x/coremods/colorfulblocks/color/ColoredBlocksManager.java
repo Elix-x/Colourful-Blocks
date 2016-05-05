@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-import code.elix_x.coremods.colorfulblocks.ColourfulBlocksBase;
+import code.elix_x.coremods.colorfulblocks.ColorfulBlocksBase;
 import code.elix_x.coremods.colorfulblocks.net.ColorfulBlocksSyncMessage;
 import code.elix_x.excore.utils.color.RGBA;
 import code.elix_x.excore.utils.nbt.mbt.MBT;
@@ -66,7 +66,7 @@ public class ColoredBlocksManager extends WorldSavedData {
 			} else if(original == -1){
 				return rgba.argb();
 			} else {
-				if(ColourfulBlocksBase.multipyOriginalColor){
+				if(ColorfulBlocksBase.multipyOriginalColor){
 					return rgba.multiply(new RGBA(original)).argb();
 				} else {
 					return rgba.argb();
@@ -144,13 +144,13 @@ public class ColoredBlocksManager extends WorldSavedData {
 	public void syncWith(EntityPlayerMP player){
 		NBTTagCompound nbt = new NBTTagCompound();
 		writeToNBT(nbt);
-		ColourfulBlocksBase.net.sendTo(new ColorfulBlocksSyncMessage(dimId, nbt), player);
+		ColorfulBlocksBase.net.sendTo(new ColorfulBlocksSyncMessage(dimId, nbt), player);
 	}
 
 	public void syncWithAll(){
 		NBTTagCompound nbt = new NBTTagCompound();
 		writeToNBT(nbt);
-		ColourfulBlocksBase.net.sendToAll(new ColorfulBlocksSyncMessage(dimId, nbt));
+		ColorfulBlocksBase.net.sendToAll(new ColorfulBlocksSyncMessage(dimId, nbt));
 	}
 
 }

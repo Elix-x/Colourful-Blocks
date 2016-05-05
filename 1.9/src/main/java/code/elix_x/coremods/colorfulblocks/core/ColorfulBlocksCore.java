@@ -2,7 +2,7 @@ package code.elix_x.coremods.colorfulblocks.core;
 
 import java.util.Map;
 
-import code.elix_x.coremods.colorfulblocks.ColourfulBlocksBase;
+import code.elix_x.coremods.colorfulblocks.ColorfulBlocksBase;
 import code.elix_x.excore.EXCore;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.Name;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.SortingIndex;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
-@Name(ColourfulBlocksBase.MODID)
+@Name(ColorfulBlocksBase.MODID)
 @TransformerExclusions("code.elix_x.coremods.colorfulblocks.core")
 @MCVersion(EXCore.MCVERSION)
 @SortingIndex(1001)

@@ -1,6 +1,6 @@
 package code.elix_x.coremods.colorfulblocks.client.gui;
 
-import code.elix_x.coremods.colorfulblocks.ColourfulBlocksBase;
+import code.elix_x.coremods.colorfulblocks.ColorfulBlocksBase;
 import code.elix_x.coremods.colorfulblocks.net.ColorChangeMessage;
 import code.elix_x.excore.utils.client.gui.ColorSelectorGuiScreen;
 import code.elix_x.excore.utils.client.gui.elements.ButtonGuiElement;
@@ -21,7 +21,7 @@ public class GuiSelectColor extends ColorSelectorGuiScreen {
 			@Override
 			public void onButtonPressed(){
 				super.onButtonPressed();
-				ColourfulBlocksBase.net.sendToServer(new ColorChangeMessage(color));
+				ColorfulBlocksBase.net.sendToServer(new ColorChangeMessage(color));
 			}
 
 		});

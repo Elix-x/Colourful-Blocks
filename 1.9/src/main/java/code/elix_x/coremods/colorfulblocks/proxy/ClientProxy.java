@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 import com.google.common.collect.Sets;
 
-import code.elix_x.coremods.colorfulblocks.ColourfulBlocksBase;
+import code.elix_x.coremods.colorfulblocks.ColorfulBlocksBase;
 import code.elix_x.coremods.colorfulblocks.client.color.ColorfulBlocksBlockColor;
 import code.elix_x.coremods.colorfulblocks.client.color.StandartColoringToolItemColor;
 import code.elix_x.coremods.colorfulblocks.client.events.LastRenderWorldEvent;
@@ -101,7 +101,7 @@ public class ClientProxy implements IColorfulBlocksProxy {
 
 				@Override
 				public Set<String> getResourceDomains(){
-					return Sets.newHashSet(ColourfulBlocksBase.MODID);
+					return Sets.newHashSet(ColorfulBlocksBase.MODID);
 				}
 
 				@Override

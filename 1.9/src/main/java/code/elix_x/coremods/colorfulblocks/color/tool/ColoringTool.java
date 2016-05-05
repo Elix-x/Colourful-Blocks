@@ -2,7 +2,7 @@ package code.elix_x.coremods.colorfulblocks.color.tool;
 
 import java.util.List;
 
-import code.elix_x.coremods.colorfulblocks.ColourfulBlocksBase;
+import code.elix_x.coremods.colorfulblocks.ColorfulBlocksBase;
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringMaterialsManager;
 import code.elix_x.coremods.colorfulblocks.color.material.ColoringToolMaterial;
 import code.elix_x.excore.utils.color.RGBA;
@@ -185,7 +185,7 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 					player.inventory.setInventorySlotContents(bs, itemstack);
 				}
 
-				if(ColourfulBlocksBase.consumeWaterOnPaint){
+				if(ColorfulBlocksBase.consumeWaterOnPaint){
 					player.inventory.decrStackSize(player.inventory.getSlotFor(new ItemStack(Items.WATER_BUCKET)), 1);
 					player.inventory.addItemStackToInventory(new ItemStack(Items.BUCKET));
 				}

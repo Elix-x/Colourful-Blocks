@@ -35,15 +35,15 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = ColourfulBlocksBase.MODID, name = ColourfulBlocksBase.NAME, version = ColourfulBlocksBase.VERSION, dependencies = "required-after:" + EXCore.DEPENDENCY, acceptedMinecraftVersions = EXCore.MCVERSION)
-public class ColourfulBlocksBase {
+@Mod(modid = ColorfulBlocksBase.MODID, name = ColorfulBlocksBase.NAME, version = ColorfulBlocksBase.VERSION, dependencies = "required-after:" + EXCore.DEPENDENCY, acceptedMinecraftVersions = EXCore.MCVERSION)
+public class ColorfulBlocksBase {
 
 	public static final String MODID = "colorfulblocks";
 	public static final String NAME = "Colorful Blocks";
 	public static final String VERSION = "1.2.2";
 
 	@Mod.Instance(MODID)
-	public static ColourfulBlocksBase instance;
+	public static ColorfulBlocksBase instance;
 
 	@SidedProxy(clientSide = "code.elix_x.coremods.colorfulblocks.proxy.ClientProxy", serverSide = "code.elix_x.coremods.colorfulblocks.proxy.ServerProxy")
 	public static IColorfulBlocksProxy proxy;
@@ -143,7 +143,7 @@ public class ColourfulBlocksBase {
 
 			@Override
 			public ModelResourceLocation getDefaultModel(){
-				return new ModelResourceLocation(ColourfulBlocksBase.MODID + ":brush", "inventory");
+				return new ModelResourceLocation(ColorfulBlocksBase.MODID + ":brush", "inventory");
 			}
 
 		});

@@ -1,6 +1,6 @@
 package code.elix_x.coremods.colorfulblocks.events;
 
-import code.elix_x.coremods.colorfulblocks.ColourfulBlocksBase;
+import code.elix_x.coremods.colorfulblocks.ColorfulBlocksBase;
 import code.elix_x.coremods.colorfulblocks.color.ColoredBlocksManager;
 import code.elix_x.coremods.colorfulblocks.color.tool.ColoringToolsManager;
 import code.elix_x.coremods.colorfulblocks.color.tool.IColoringTool;
@@ -26,7 +26,7 @@ public class MainipulatePaintEvent {
 		if(itemstack != null && itemstack.getItem() instanceof IColoringTool){
 			IColoringTool tool = (IColoringTool) itemstack.getItem();
 			if(event instanceof RightClickEmpty && tool.displayDefaultGui(player, itemstack)){
-				ColourfulBlocksBase.proxy.displayGuiSelectColor(itemstack);
+				ColorfulBlocksBase.proxy.displayGuiSelectColor(itemstack);
 				event.setCanceled(true);
 			}
 			if(event instanceof RightClickBlock && tool.colorBlocksOnRightClick(player, itemstack)){
@@ -52,7 +52,7 @@ public class MainipulatePaintEvent {
 			if(itemstack != null && itemstack.getItem() == Items.POTIONITEM && itemstack.getItemDamage() == 0){
 				if(ColoredBlocksManager.get(event.getWorld()).hasRGBA(new BlockPos(event.getPos()))){
 					ColoredBlocksManager.get(event.getWorld()).removeRGBA(new BlockPos(event.getPos()));
-					if(ColourfulBlocksBase.consumeWaterOnErase && !player.capabilities.isCreativeMode){
+					if(ColorfulBlocksBase.consumeWaterOnErase && !player.capabilities.isCreativeMode){
 						player.setItemStackToSlot(event.getHand() == EnumHand.MAIN_HAND ? EntityEquipmentSlot.MAINHAND : EntityEquipmentSlot.OFFHAND, new ItemStack(Items.GLASS_BOTTLE));
 					}
 					event.setCanceled(true);
