@@ -5,6 +5,8 @@ import net.minecraft.item.ItemStack;
 
 public interface IColorfulBlocksProxy extends IProxy {
 
+	public void loadLocalisations();
+
 	public void displayGuiSelectColor(ItemStack coloringTool);
 
 }

@@ -3,7 +3,6 @@ package code.elix_x.coremods.colorfulblocks.color.material;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -41,7 +40,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.LanguageMap;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -437,51 +435,7 @@ public class ColoringMaterialsManager {
 	}
 
 	private static void loadLocalisations(){
-		logger.info("Loading localisations");
-		for(File file : extensionsDir.listFiles(new FileFilter(){
-
-			@Override
-			public boolean accept(File file){
-				return file.isDirectory();
-			}
-
-		})){
-			logger.info("Loading localisations from extension " + file.getName());
-			File langDir = new File(file, "lang");
-			langDir.mkdir();
-			for(File lang : langDir.listFiles(new FileFilter(){
-
-				@Override
-				public boolean accept(File file){
-					return !file.isDirectory() && file.getName().endsWith(".lang");
-				}
-
-			})){
-				try {
-					/*String language = lang.getName().substring(0, lang.getName().length() - 5);
-					HashMap<String, String> map = new HashMap<String, String>();
-
-					BufferedReader br = new BufferedReader(new FileReader(lang)) ;
-
-					for(String line; (line = br.readLine()) != null;){
-						try{
-							map.put(line.split("=")[0], line.split("=")[1]);
-						} catch(IndexOutOfBoundsException e){
-
-						}
-					}
-
-					br.close();
-
-					LanguageMap.instance().injectLanguage(language, map);*/
-					//TODO
-					LanguageMap.inject(new FileInputStream(lang));
-				} catch(IOException e){
-					logger.error("Caught exception while parsing lang file: ", e);
-				}
-			}
-
-		}
+		ColourfulBlocksBase.proxy.loadLocalisations();
 	}
 
 	/*

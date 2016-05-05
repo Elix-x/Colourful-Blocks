@@ -23,6 +23,11 @@ public class ServerProxy implements IColorfulBlocksProxy {
 	}
 
 	@Override
+	public void loadLocalisations(){
+
+	}
+
+	@Override
 	public void displayGuiSelectColor(ItemStack coloringTool){
 
 	}
