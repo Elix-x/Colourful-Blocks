@@ -33,16 +33,6 @@ public class ItemBrush extends ColoringTool {
 		return Lists.newArrayList(new BlockPos(player.rayTrace(5.0, 0).getBlockPos()));
 	}
 
-	/*@Override
-	protected IIcon registerMaterialIcon(IIconRegister reg){
-		return reg.registerIcon(ColourfulBlocksBase.MODID + ":brushhandle");
-	}
-
-	@Override
-	protected IIcon registerPaintIcon(IIconRegister reg){
-		return reg.registerIcon(ColourfulBlocksBase.MODID + ":brushtop");
-	}*/
-
 	/*
 	 * Use
 	 */

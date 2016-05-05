@@ -264,14 +264,8 @@ public abstract class ColoringTool extends Item implements IColoringTool {
 		}
 	}
 
-	/*
-	 * Abstract
-	 */
 
-	//TODO
 
-	//	protected abstract IIcon registerMaterialIcon(IIconRegister reg);
 
-	//	protected abstract IIcon registerPaintIcon(IIconRegister reg);
 
 }
