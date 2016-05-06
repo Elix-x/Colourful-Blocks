@@ -1,6 +1,5 @@
 package code.elix_x.coremods.colorfulblocks.color.material;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
@@ -34,18 +33,11 @@ import code.elix_x.excore.utils.color.RGBA;
 import code.elix_x.excore.utils.items.ItemStackStringTranslator;
 import code.elix_x.excore.utils.math.AdvancedMathUtils;
 import code.elix_x.excore.utils.recipes.RecipeStringTranslator;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ColoringMaterialsManager {
 
@@ -69,9 +61,9 @@ public class ColoringMaterialsManager {
 			initLocalisations();
 		}
 		logger.info("Fixing extensions");
-		if(FMLCommonHandler.instance().getSide() == Side.CLIENT && ColorfulBlocksBase.mainConfig.getBoolean("fixColors", "json", true, "Fix color for items with color \"0\" or \"0:0:0\" or \"0:0:0:0\", but with valid crafting item.")){
+		/*if(ColorfulBlocksBase.mainConfig.getBoolean("fixColors", "json", true, "Fix color for items with invalid color, but with valid crafting item.")){
 			fixColors();
-		}
+		}*/
 		logger.info("Loading extensions");
 		loadMaterials();
 		loadRecipes();
@@ -98,14 +90,14 @@ public class ColoringMaterialsManager {
 		return material.getRepairItemStack();
 	}
 
-	@SideOnly(Side.CLIENT)
 	private static RGBA recognizeColorToRGBA(ToolMaterial material){
 		return recognizeColorToRGBA(recognizeRepairItem(material));
 	}
 
-	@SideOnly(Side.CLIENT)
 	private static RGBA recognizeColorToRGBA(ItemStack itemstack){
-		RGBA color = new RGBA(0, 0, 0, 0);
+		//TODO
+		return new RGBA(0, 0, 0, 0);
+		/*RGBA color = new RGBA(0, 0, 0, 0);
 		if(itemstack != null && itemstack.getItem() != null){
 			ResourceLocation texture = null;
 			if(Block.getBlockFromItem(itemstack.getItem()) != Blocks.AIR){
@@ -153,7 +145,7 @@ public class ColoringMaterialsManager {
 				}
 			}
 		}
-		return color;
+		return color;*/
 	}
 
 	/*
