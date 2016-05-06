@@ -2,6 +2,7 @@ package code.elix_x.coremods.colorfulblocks.color.tool;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -75,7 +76,10 @@ public class ColoringToolsManager {
 	}
 
 	public static <I extends Item & IColoringTool> Collection<I> getAllItems(ColoringToolProvider<I> provider){
-		return (Collection<I>) providersItems.get(provider);
+		Collection<Item> c = providersItems.get(provider);
+		Collection<I> ic = new HashSet<I>();
+		for(Item i : c) ic.add((I) i);
+		return ic;
 	}
 
 	/*
