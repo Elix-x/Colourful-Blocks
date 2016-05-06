@@ -1,7 +1,7 @@
 [
 {
-  "modid": "colourfullblocks",
-  "name": "Colourfull Blocks",
+  "modid": "colorfulblocks",
+  "name": "Colorful Blocks",
   "description": "",
   "version": "${version}",
   "mcversion": "${mcversion}",
