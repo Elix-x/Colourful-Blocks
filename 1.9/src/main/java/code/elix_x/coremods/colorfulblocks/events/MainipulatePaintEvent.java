@@ -14,7 +14,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickEmpty;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class MainipulatePaintEvent {
@@ -25,7 +25,7 @@ public class MainipulatePaintEvent {
 		ItemStack itemstack = event.getItemStack();
 		if(itemstack != null && itemstack.getItem() instanceof IColoringTool){
 			IColoringTool tool = (IColoringTool) itemstack.getItem();
-			if(event instanceof RightClickEmpty && tool.displayDefaultGui(player, itemstack)){
+			if(event instanceof RightClickItem && tool.displayDefaultGui(player, itemstack)){
 				ColorfulBlocksBase.proxy.displayGuiSelectColor(itemstack);
 				event.setCanceled(true);
 			}
