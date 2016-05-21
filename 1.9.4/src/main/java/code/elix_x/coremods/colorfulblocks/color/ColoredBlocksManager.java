@@ -42,7 +42,7 @@ public class ColoredBlocksManager extends WorldSavedData implements IColoredBloc
 	private static Multimap<Integer, Pair<BlockPos, RGBA>> coloredBlocksQueue;
 
 	public static ColoredBlocksManager get(World world){
-		ColoredBlocksManager manager = (ColoredBlocksManager) world.getPerWorldStorage().loadData(ColoredBlocksManager.class, NAME);
+		ColoredBlocksManager manager = (ColoredBlocksManager) world.getPerWorldStorage().getOrLoadData(ColoredBlocksManager.class, NAME);
 		if(manager == null){
 			manager = new ColoredBlocksManager(NAME);
 			manager.dimId = world.provider.getDimension();
@@ -137,9 +137,10 @@ public class ColoredBlocksManager extends WorldSavedData implements IColoredBloc
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt){
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt){
 		nbt.setInteger("dimId", dimId);
 		nbt.setTag(NAME, mbt.toNBT(coloredBlocks));
+		return nbt;
 	}
 
 	public void syncWith(EntityPlayerMP player){
